@@ -1,35 +1,29 @@
 @import './base.css';
 
+/*
+ * Global app-level layout helpers for Clean-Cycle.
+ * Page sections live in the views; reusable pieces live in the components.
+ */
+
 #app {
-  max-width: 1280px;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Shared centered content container, matches the 1280px Figma frame. */
+.container {
+  width: 100%;
+  max-width: var(--cc-max-width);
   margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+  padding-left: var(--cc-gutter);
+  padding-right: var(--cc-gutter);
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+h1,
+h2,
+h3 {
+  color: var(--cc-heading);
+  line-height: 1.2;
 }
