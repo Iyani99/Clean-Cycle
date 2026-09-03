@@ -84,7 +84,8 @@ On this development environment, PowerShell may block `npm.ps1`, so use `npm.cmd
 | `npm.cmd run build` | Build the production bundle into `dist/` |
 | `npm.cmd run lint` | Run the linters (oxlint + ESLint) |
 
-## Project Context
+## Repository
 
-See [docs/PROJECT-CONTEXT.md](docs/PROJECT-CONTEXT.md) for the full project
-context, decisions, and planned development phases.
+GitHub: https://github.com/Iyani99/Clean-Cycle.git
+
+This repository contains the current frontend implementation of Clean-Cycle for the Week 5 project requirement.
