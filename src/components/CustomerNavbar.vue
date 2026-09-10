@@ -8,14 +8,14 @@ import logoIcon from '../assets/images/logo-icon.png'
  * Shared by the signed-in customer screens. Distinct from the public
  * `AppNavbar` (which shows Login / Sign Up instead of the icon group).
  *
- * "Track Services" has no route yet, so it renders as a disabled item.
- * The bell / gear / avatar are inert for this prototype.
+ * The bell / gear / avatar are inert for this prototype. The `to: null` branch
+ * below is kept for any future nav item that has no screen yet.
  */
 const links = [
   { label: 'Home', to: '/dashboard' },
   { label: 'Services', to: '/services' },
   { label: 'Booknow', to: '/book' },
-  { label: 'Track Services', to: null },
+  { label: 'Track Services', to: '/tracking' },
 ]
 </script>
 

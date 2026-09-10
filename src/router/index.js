@@ -34,6 +34,14 @@ const router = createRouter({
       component: () => import('../views/PaymentView.vue'),
     },
     {
+      path: '/tracking',
+      name: 'tracking',
+      // Service Tracking - Customer: authenticated screen with its own
+      // CustomerNavbar, so the public navbar is hidden here.
+      meta: { hideNavbar: true },
+      component: () => import('../views/TrackingView.vue'),
+    },
+    {
       path: '/login',
       name: 'login',
       // The Customer Login screen has its own full-page layout (no public navbar).
