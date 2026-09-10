@@ -23,6 +23,8 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
+      // The Customer Login screen has its own full-page layout (no public navbar).
+      meta: { hideNavbar: true },
       component: () => import('../views/LoginView.vue'),
     },
     {

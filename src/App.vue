@@ -4,6 +4,7 @@ import AppNavbar from './components/AppNavbar.vue'
 </script>
 
 <template>
-  <AppNavbar />
+  <!-- Some screens (e.g. Login) have their own layout and hide the public navbar. -->
+  <AppNavbar v-if="!$route.meta.hideNavbar" />
   <RouterView />
 </template>
