@@ -34,6 +34,14 @@ const router = createRouter({
       meta: { hideNavbar: true },
       component: () => import('../views/SignUpView.vue'),
     },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      // The Customer Dashboard renders its own authenticated header (CustomerNavbar),
+      // so the public navbar is hidden here.
+      meta: { hideNavbar: true },
+      component: () => import('../views/DashboardView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }

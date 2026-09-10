@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import AuthLayout from '../components/AuthLayout.vue'
 import AuthField from '../components/AuthField.vue'
 import AuthSubmit from '../components/AuthSubmit.vue'
@@ -14,13 +14,15 @@ import keyIcon from '../assets/icons/key.svg'
  * no stored session. The form just reproduces the approved Login UI and keeps
  * the field values in local component state.
  */
+const router = useRouter()
 const email = ref('')
 const password = ref('')
 
 function onSubmit() {
-  // A real login would verify the credentials and send the customer to their
-  // dashboard once that screen exists. For this prototype we intentionally do
-  // nothing beyond the browser's built-in "required" field check.
+  // Prototype-only navigation: no credentials are checked and nothing is stored.
+  // Submitting the demo form simply moves to the Customer Dashboard so the
+  // screen flow can be demonstrated.
+  router.push('/dashboard')
 }
 </script>
 
