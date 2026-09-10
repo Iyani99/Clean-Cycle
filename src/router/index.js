@@ -12,7 +12,9 @@ const router = createRouter({
     {
       path: '/services',
       name: 'services',
-      // Lazy-loaded placeholder page (Week 5 navigation demo).
+      // Services - Customer: authenticated customer screen with its own
+      // CustomerNavbar, so the public navbar is hidden here.
+      meta: { hideNavbar: true },
       component: () => import('../views/ServicesView.vue'),
     },
     {
