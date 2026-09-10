@@ -30,6 +30,8 @@ const router = createRouter({
     {
       path: '/signup',
       name: 'signup',
+      // The Customer Signup screen has its own full-page layout (no public navbar).
+      meta: { hideNavbar: true },
       component: () => import('../views/SignUpView.vue'),
     },
   ],
