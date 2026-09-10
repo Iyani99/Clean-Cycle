@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import CustomerNavbar from '../components/CustomerNavbar.vue'
 import AppIcon from '../components/AppIcon.vue'
 import BookingSection from '../components/BookingSection.vue'
@@ -7,9 +8,10 @@ import BookingSection from '../components/BookingSection.vue'
 /**
  * Book now - Customer (Figma frame "Book now - Customer").
  *
- * Frontend-only prototype. Every field below is plain Vue local state — there
- * is NO backend, NO booking persistence, NO real payment. "Confirm Booking"
- * just shows a local confirmation message; it does not create anything.
+ * Frontend-only prototype. Every field below is plain Vue local state. There
+ * is no backend, no booking persistence, no real payment. "Confirm Booking"
+ * shows a local confirmation message and a link on to the Payment page; it does
+ * not create or send anything.
  *
  * Service names / prices are shown exactly as the Book Now screenshot labels
  * them ("₱85.00 / Kg", "₱70.00 / Item"). The Services screen phrases the second
@@ -166,13 +168,17 @@ function confirmBooking() {
           </div>
         </BookingSection>
 
-        <p v-if="submitted" class="book__done" role="status">
-          Thanks! Your booking request has been recorded for this demo. D'Cassini
-          Laundry will contact you to confirm the schedule. No real booking is
-          created — Clean-Cycle is a frontend prototype.
-        </p>
+        <template v-if="submitted">
+          <p class="book__done" role="status">
+            Booking confirmed! D'Cassini Laundry will contact you shortly to confirm
+            your schedule and pickup details.
+          </p>
+          <RouterLink to="/payment" class="book__confirm book__confirm--link">
+            Proceed to Payment
+          </RouterLink>
+        </template>
 
-        <button type="submit" class="book__confirm">Confirm Booking</button>
+        <button v-else type="submit" class="book__confirm">Confirm Booking</button>
       </form>
     </div>
   </main>
@@ -423,6 +429,13 @@ function confirmBooking() {
 
 .book__confirm:hover {
   background-color: #002d6d;
+}
+
+.book__confirm--link {
+  display: block;
+  margin-top: 16px;
+  text-align: center;
+  text-decoration: none;
 }
 
 /* Responsive ------------------------------------------------ */

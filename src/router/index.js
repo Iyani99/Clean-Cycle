@@ -26,6 +26,14 @@ const router = createRouter({
       component: () => import('../views/BookNowView.vue'),
     },
     {
+      path: '/payment',
+      name: 'payment',
+      // Payment Page - Customer: standalone order-summary card. The Figma frame
+      // shows no navbar, so none is rendered here.
+      meta: { hideNavbar: true },
+      component: () => import('../views/PaymentView.vue'),
+    },
+    {
       path: '/login',
       name: 'login',
       // The Customer Login screen has its own full-page layout (no public navbar).
