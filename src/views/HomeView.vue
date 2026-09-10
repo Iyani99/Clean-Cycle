@@ -43,7 +43,8 @@ const services = [
             cleaning services right at your doorstep. We handle the dirty work so
             you don't have to.
           </p>
-          <BaseButton to="/book" variant="primary" size="lg">Book Now</BaseButton>
+          <!-- Public visitors sign in before entering the customer booking screen. -->
+          <BaseButton to="/login?redirect=/book" variant="primary" size="lg">Book Now</BaseButton>
         </div>
 
         <div class="hero__media">
@@ -76,6 +77,7 @@ const services = [
             :icon-bg="service.iconBg"
             :image="service.image"
             :accent="service.accent"
+            to="/login?redirect=/services"
           />
         </div>
       </div>

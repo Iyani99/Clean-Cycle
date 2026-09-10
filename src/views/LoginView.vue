@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import AuthLayout from '../components/AuthLayout.vue'
 import AuthField from '../components/AuthField.vue'
 import AuthSubmit from '../components/AuthSubmit.vue'
@@ -14,15 +14,23 @@ import keyIcon from '../assets/icons/key.svg'
  * no stored session. The form just reproduces the approved Login UI and keeps
  * the field values in local component state.
  */
+const route = useRoute()
 const router = useRouter()
 const email = ref('')
 const password = ref('')
 
+// Customer-area routes a public "Book Now" style CTA may ask Login to forward to
+// after submit. Anything not on this list falls back to the Dashboard, so an
+// odd or off-site `?redirect=` value can never send the visitor somewhere unsafe
+// or to a blank screen.
+const REDIRECT_ALLOWLIST = ['/dashboard', '/services', '/book', '/payment', '/tracking']
+
 function onSubmit() {
   // Prototype-only navigation: no credentials are checked and nothing is stored.
-  // Submitting the demo form simply moves to the Customer Dashboard so the
-  // screen flow can be demonstrated.
-  router.push('/dashboard')
+  // If the visitor arrived via a link like /login?redirect=/book, continue there;
+  // otherwise go to the Customer Dashboard (the normal Login destination).
+  const target = route.query.redirect
+  router.push(REDIRECT_ALLOWLIST.includes(target) ? target : '/dashboard')
 }
 </script>
 

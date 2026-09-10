@@ -3,10 +3,14 @@ import { RouterLink } from 'vue-router'
 import BaseButton from './BaseButton.vue'
 import logoIcon from '../assets/images/logo-icon.png'
 
+// Public navigation. "Services" and "Book Now" are part of the authenticated
+// customer area, so a public visitor is routed through the Login screen first;
+// Login then forwards to the requested route on submit. See LoginView's redirect
+// handling.
 const navLinks = [
   { label: 'Home', to: '/' },
-  { label: 'Services', to: '/services' },
-  { label: 'Book Now', to: '/book' },
+  { label: 'Services', to: '/login?redirect=/services' },
+  { label: 'Book Now', to: '/login?redirect=/book' },
 ]
 </script>
 

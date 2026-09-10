@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import AuthLayout from '../components/AuthLayout.vue'
 import AuthField from '../components/AuthField.vue'
 import AuthSubmit from '../components/AuthSubmit.vue'
@@ -12,6 +12,7 @@ import AuthSubmit from '../components/AuthSubmit.vue'
  * nothing is sent anywhere. The form just reproduces the approved Signup UI
  * and keeps the field values in local component state.
  */
+const router = useRouter()
 const fullName = ref('')
 const phone = ref('')
 const email = ref('')
@@ -19,9 +20,9 @@ const password = ref('')
 const confirmPassword = ref('')
 
 function onSubmit() {
-  // A real signup would create the customer account and continue into the app.
-  // This prototype has no backend, so the form intentionally does nothing here
-  // beyond the browser's built-in "required" field check.
+  // Prototype-only: no account is created and nothing is stored. Submitting the
+  // form moves to the Login screen, the natural next step after registering.
+  router.push('/login')
 }
 </script>
 
