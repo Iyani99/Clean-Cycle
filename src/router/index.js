@@ -20,6 +20,9 @@ const router = createRouter({
     {
       path: '/book',
       name: 'book',
+      // Book now - Customer: authenticated customer screen with its own
+      // CustomerNavbar, so the public navbar is hidden here.
+      meta: { hideNavbar: true },
       component: () => import('../views/BookNowView.vue'),
     },
     {

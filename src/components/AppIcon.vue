@@ -1,9 +1,10 @@
 <script setup>
 /**
- * Small inline icon set for the customer dashboard, drawn as simple
- * Feather-style strokes that inherit `currentColor`. These are hand-built
- * recreations of the glyphs shown in the Figma screenshot — swap in the exact
- * exported Figma icons if/when they become available.
+ * Small inline icon set for the customer screens (Dashboard, Services,
+ * Book Now), drawn as simple Feather-style strokes that inherit `currentColor`.
+ * These are hand-built recreations of the glyphs shown in the Figma
+ * screenshots — swap in the exact exported Figma icons if/when they become
+ * available.
  */
 defineProps({
   name: { type: String, required: true },
@@ -33,6 +34,24 @@ const icons = {
     'M22 12h-6l-2 3h-4l-2-3H2',
     'M5.5 5.1L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z',
   ],
+  // Book Now — logistics + payment glyphs (screenshot approximations)
+  truck: [
+    'M1 4h15v12H1z',
+    'M16 8h4l3 3v5h-7z',
+    'M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
+    'M18.5 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
+  ],
+  store: ['M3 8l1.8-4h14.4L21 8', 'M4 8v12h16V8', 'M3 8h18', 'M9 20v-5h6v5'],
+  walk: [
+    'M14 4a2 2 0 1 1-4 0 2 2 0 0 1 4 0z',
+    'M12 6v7',
+    'M12 13l-3 7',
+    'M12 13l3 7',
+    'M12 8l-4 2',
+    'M12 8l4 2',
+  ],
+  cash: ['M2 6h20v12H2z', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z', 'M6 9h.01', 'M18 15h.01'],
+  card: ['M2 5h20v14H2z', 'M2 10h20', 'M5 15h5'],
 }
 </script>
 
