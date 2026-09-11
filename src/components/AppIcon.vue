@@ -76,6 +76,8 @@ const icons = {
   'more-vertical': ['M12 5h.01', 'M12 12h.01', 'M12 19h.01'],
   // Booking Management glyph
   search: ['M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z', 'M21 21l-4.35-4.35'],
+  // Customer Management glyph
+  download: ['M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4', 'M7 10l5 5 5-5', 'M12 15V3'],
 }
 </script>
 

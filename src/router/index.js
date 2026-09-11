@@ -95,6 +95,14 @@ const router = createRouter({
       meta: { hideNavbar: true },
       component: () => import('../views/AdminBookingsView.vue'),
     },
+    {
+      path: '/admin/customers',
+      name: 'admin-customers',
+      // Customer Management - Admin: renders the same AdminSidebar shell, so
+      // the public navbar is hidden here.
+      meta: { hideNavbar: true },
+      component: () => import('../views/AdminCustomersView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }
