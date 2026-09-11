@@ -7,8 +7,8 @@ import logoIcon from '../assets/images/logo-icon.png'
  * Persistent left Admin sidebar (Figma "Dashboard - Admin"). Shared shell
  * intended for reuse across the remaining Admin screens.
  *
- * Dashboard, Bookings, and Customers have real screens; the rest stay
- * visibly present (for fidelity) but non-navigating, matching the same
+ * Dashboard, Bookings, Customers, and Payments have real screens; the rest
+ * stay visibly present (for fidelity) but non-navigating, matching the same
  * `to: null` pattern already used in `CustomerNavbar`. "+ New Booking" is
  * inert for the same reason — New Record Admin is a separate, not-yet-built
  * screen.
@@ -18,7 +18,7 @@ const navItems = [
   { key: 'bookings', label: 'Bookings', icon: 'calendar', to: '/admin/bookings' },
   { key: 'customers', label: 'Customers', icon: 'users', to: '/admin/customers' },
   { key: 'logistics', label: 'Logistics', icon: 'truck', to: null },
-  { key: 'payments', label: 'Payments', icon: 'card', to: null },
+  { key: 'payments', label: 'Payments', icon: 'card', to: '/admin/payments' },
   { key: 'reports', label: 'Reports', icon: 'bar-chart', to: null },
   { key: 'notifications', label: 'Notifications', icon: 'bell', to: null },
   { key: 'settings', label: 'Settings', icon: 'gear', to: null },

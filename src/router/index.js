@@ -103,6 +103,14 @@ const router = createRouter({
       meta: { hideNavbar: true },
       component: () => import('../views/AdminCustomersView.vue'),
     },
+    {
+      path: '/admin/payments',
+      name: 'admin-payments',
+      // Payment Management - Admin: renders the same AdminSidebar shell, so
+      // the public navbar is hidden here.
+      meta: { hideNavbar: true },
+      component: () => import('../views/AdminPaymentsView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }
