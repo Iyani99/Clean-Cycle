@@ -63,6 +63,14 @@ const router = createRouter({
       meta: { hideNavbar: true },
       component: () => import('../views/DashboardView.vue'),
     },
+    {
+      path: '/settings',
+      name: 'settings',
+      // Settings/Profile - Customer: authenticated customer screen with its own
+      // CustomerNavbar, so the public navbar is hidden here.
+      meta: { hideNavbar: true },
+      component: () => import('../views/SettingsView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }

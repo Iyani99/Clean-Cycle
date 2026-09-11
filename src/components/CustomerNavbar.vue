@@ -8,8 +8,9 @@ import logoIcon from '../assets/images/logo-icon.png'
  * Shared by the signed-in customer screens. Distinct from the public
  * `AppNavbar` (which shows Login / Sign Up instead of the icon group).
  *
- * The bell / gear / avatar are inert for this prototype. The `to: null` branch
- * below is kept for any future nav item that has no screen yet.
+ * The gear icon routes to Settings/Profile (`/settings`). The bell and avatar
+ * remain inert for this prototype. The `to: null` branch below is kept for any
+ * future nav item that has no screen yet.
  */
 const links = [
   { label: 'Home', to: '/dashboard' },
@@ -52,9 +53,9 @@ const links = [
         <button type="button" class="customer-nav__icon-btn" aria-label="Notifications">
           <AppIcon name="bell" :size="20" />
         </button>
-        <button type="button" class="customer-nav__icon-btn" aria-label="Settings">
+        <RouterLink to="/settings" class="customer-nav__icon-btn" aria-label="Settings">
           <AppIcon name="gear" :size="20" />
-        </button>
+        </RouterLink>
         <button type="button" class="customer-nav__avatar" aria-label="Your profile">
           <AppIcon name="user" :size="22" />
         </button>
@@ -161,6 +162,11 @@ const links = [
 }
 
 .customer-nav__icon-btn:hover {
+  color: var(--cc-primary);
+  background-color: var(--cc-bg);
+}
+
+.customer-nav__icon-btn.router-link-active {
   color: var(--cc-primary);
   background-color: var(--cc-bg);
 }

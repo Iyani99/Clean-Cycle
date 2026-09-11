@@ -54,6 +54,8 @@ const icons = {
   card: ['M2 5h20v14H2z', 'M2 10h20', 'M5 15h5'],
   // Service Tracking glyphs
   check: ['M20 6 9 17l-5-5'],
+  // Settings/Profile glyph
+  logout: ['M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4', 'M16 17l5-5-5-5', 'M21 12H9'],
   headset: [
     'M4 14v-2a8 8 0 0 1 16 0v2',
     'M4 14a2 2 0 0 1 2-2h1v6H6a2 2 0 0 1-2-2z',
