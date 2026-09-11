@@ -111,6 +111,14 @@ const router = createRouter({
       meta: { hideNavbar: true },
       component: () => import('../views/AdminPaymentsView.vue'),
     },
+    {
+      path: '/admin/logistics',
+      name: 'admin-logistics',
+      // Logistics Management - Admin: renders the same AdminSidebar shell, so
+      // the public navbar is hidden here.
+      meta: { hideNavbar: true },
+      component: () => import('../views/AdminLogisticsView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }

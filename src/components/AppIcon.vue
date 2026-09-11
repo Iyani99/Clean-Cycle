@@ -80,6 +80,15 @@ const icons = {
   download: ['M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4', 'M7 10l5 5 5-5', 'M12 15V3'],
   // Payment Management glyph
   filter: ['M22 3H2l8 9.46V19l4 2v-8.54L22 3z'],
+  // Logistics Management glyphs (screenshot approximations)
+  motorcycle: [
+    'M5 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
+    'M18 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
+    'M5 17l2-6h5l2 4h4l1 2',
+    'M12 11l2-4h3',
+  ],
+  map: ['M1 6v15l7-3 8 3 7-3V3l-7 3-8-3z', 'M8 3v15', 'M16 6v15'],
+  route: ['M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4z', 'M18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4z', 'M8 17c4-1 4-9 8-11'],
 }
 </script>
 
