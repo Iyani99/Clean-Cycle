@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import AdminSidebar from '../components/AdminSidebar.vue'
+import { RouterLink } from 'vue-router'
+import AdminLayout from '../components/AdminLayout.vue'
 import AppIcon from '../components/AppIcon.vue'
 
 /**
@@ -38,98 +39,80 @@ function dismissBanner() {
 </script>
 
 <template>
-  <div class="admin-dashboard">
-    <AdminSidebar />
+  <AdminLayout>
+    <header class="admin-dashboard__header">
+      <h1 class="admin-dashboard__title">Dashboard Overview</h1>
+      <div class="admin-dashboard__updated">
+        <span class="admin-dashboard__updated-label">Last Updated</span>
+        <span class="admin-dashboard__updated-value">10:30 AM</span>
+      </div>
+    </header>
+    <hr class="admin-dashboard__divider" />
 
-    <main class="admin-dashboard__main">
-      <header class="admin-dashboard__header">
-        <h1 class="admin-dashboard__title">Dashboard Overview</h1>
-        <div class="admin-dashboard__updated">
-          <span class="admin-dashboard__updated-label">Last Updated</span>
-          <span class="admin-dashboard__updated-value">10:30 AM</span>
-        </div>
+    <div v-if="bannerVisible" class="banner">
+      <div class="banner__text">
+        <AppIcon name="megaphone" :size="20" />
+        <span>New Booking Notification: 5 new bookings requiring assignment</span>
+      </div>
+      <div class="banner__actions">
+        <RouterLink to="/admin/bookings" class="banner__review">Review Now</RouterLink>
+        <button type="button" class="banner__dismiss" @click="dismissBanner">Dismiss</button>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <article v-for="stat in stats" :key="stat.key" class="stat-card">
+        <span class="stat-card__text">
+          <span class="stat-card__label">{{ stat.label }}</span>
+          <span class="stat-card__value">{{ stat.value }}</span>
+        </span>
+        <span class="stat-card__icon" :class="`stat-card__icon--${stat.tone}`">
+          <AppIcon :name="stat.icon" :size="20" />
+        </span>
+      </article>
+    </div>
+
+    <section class="recent-card" aria-label="Recent bookings">
+      <header class="recent-card__head">
+        <h2 class="recent-card__title">Recent Bookings</h2>
+        <RouterLink to="/admin/bookings" class="recent-card__view-all">View All →</RouterLink>
       </header>
-      <hr class="admin-dashboard__divider" />
 
-      <div v-if="bannerVisible" class="banner">
-        <div class="banner__text">
-          <AppIcon name="megaphone" :size="20" />
-          <span>New Booking Notification: 5 new bookings requiring assignment</span>
-        </div>
-        <div class="banner__actions">
-          <!-- Inert: Booking Management doesn't exist yet, so this doesn't
-               route anywhere. Kept visually present per the screenshot. -->
-          <button type="button" class="banner__review">Review Now</button>
-          <button type="button" class="banner__dismiss" @click="dismissBanner">Dismiss</button>
-        </div>
+      <div class="recent-card__scroll">
+        <table class="recent-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>NAME</th>
+              <th>DATE/TIME</th>
+              <th>SERVICE</th>
+              <th>STATUS</th>
+              <th>RIDER</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="booking in recentBookings" :key="booking.id">
+              <td><span class="booking-id">{{ booking.id }}</span></td>
+              <td>{{ booking.name }}</td>
+              <td>{{ booking.datetime }}</td>
+              <td>{{ booking.service }}</td>
+              <td><span class="status-pill">{{ booking.status }}</span></td>
+              <td>{{ booking.rider }}</td>
+              <td>
+                <button type="button" class="row-action" aria-label="Row actions">
+                  <AppIcon name="more-vertical" :size="18" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
-      <div class="stats-grid">
-        <article v-for="stat in stats" :key="stat.key" class="stat-card">
-          <span class="stat-card__text">
-            <span class="stat-card__label">{{ stat.label }}</span>
-            <span class="stat-card__value">{{ stat.value }}</span>
-          </span>
-          <span class="stat-card__icon" :class="`stat-card__icon--${stat.tone}`">
-            <AppIcon :name="stat.icon" :size="20" />
-          </span>
-        </article>
-      </div>
-
-      <section class="recent-card" aria-label="Recent bookings">
-        <header class="recent-card__head">
-          <h2 class="recent-card__title">Recent Bookings</h2>
-          <button type="button" class="recent-card__view-all">View All →</button>
-        </header>
-
-        <div class="recent-card__scroll">
-          <table class="recent-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>DATE/TIME</th>
-                <th>SERVICE</th>
-                <th>STATUS</th>
-                <th>RIDER</th>
-                <th>ACTION</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="booking in recentBookings" :key="booking.id">
-                <td><span class="booking-id">{{ booking.id }}</span></td>
-                <td>{{ booking.name }}</td>
-                <td>{{ booking.datetime }}</td>
-                <td>{{ booking.service }}</td>
-                <td><span class="status-pill">{{ booking.status }}</span></td>
-                <td>{{ booking.rider }}</td>
-                <td>
-                  <button type="button" class="row-action" aria-label="Row actions">
-                    <AppIcon name="more-vertical" :size="18" />
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </main>
-  </div>
+    </section>
+  </AdminLayout>
 </template>
 
 <style scoped>
-.admin-dashboard {
-  display: flex;
-  min-height: 100vh;
-  background-color: var(--cc-bg);
-}
-
-.admin-dashboard__main {
-  flex: 1;
-  min-width: 0;
-  padding: 32px 40px 56px;
-}
-
 /* Header ------------------------------------------------------------- */
 .admin-dashboard__header {
   display: flex;
@@ -395,16 +378,6 @@ function dismissBanner() {
 }
 
 /* Responsive -------------------------------------------------------------- */
-@media (max-width: 860px) {
-  .admin-dashboard {
-    flex-direction: column;
-  }
-
-  .admin-dashboard__main {
-    padding: 24px 20px 40px;
-  }
-}
-
 @media (max-width: 1024px) {
   .stats-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

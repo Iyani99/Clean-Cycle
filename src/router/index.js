@@ -87,6 +87,14 @@ const router = createRouter({
       meta: { hideNavbar: true },
       component: () => import('../views/AdminDashboardView.vue'),
     },
+    {
+      path: '/admin/bookings',
+      name: 'admin-bookings',
+      // Booking Management - Admin: renders the same AdminSidebar shell, so
+      // the public navbar is hidden here.
+      meta: { hideNavbar: true },
+      component: () => import('../views/AdminBookingsView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }

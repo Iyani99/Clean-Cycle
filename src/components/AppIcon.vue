@@ -74,6 +74,8 @@ const icons = {
   'bar-chart': ['M4 20V10', 'M12 20V4', 'M20 20v-6'],
   megaphone: ['M3 11l18-5v12L3 14v-3z', 'M11.6 16.8a3 3 0 1 1-5.8-1.6'],
   'more-vertical': ['M12 5h.01', 'M12 12h.01', 'M12 19h.01'],
+  // Booking Management glyph
+  search: ['M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z', 'M21 21l-4.35-4.35'],
 }
 </script>
 
