@@ -8,9 +8,10 @@ import logoIcon from '../assets/images/logo-icon.png'
  * Shared by the signed-in customer screens. Distinct from the public
  * `AppNavbar` (which shows Login / Sign Up instead of the icon group).
  *
- * The gear icon routes to Settings/Profile (`/settings`). The bell and avatar
- * remain inert for this prototype. The `to: null` branch below is kept for any
- * future nav item that has no screen yet.
+ * The gear icon routes to Settings/Profile (`/settings`) and the bell routes
+ * to Notifications (`/notifications`). The avatar remains inert for this
+ * prototype. The `to: null` branch below is kept for any future nav item that
+ * has no screen yet.
  */
 const links = [
   { label: 'Home', to: '/dashboard' },
@@ -50,9 +51,9 @@ const links = [
       </nav>
 
       <div class="customer-nav__actions">
-        <button type="button" class="customer-nav__icon-btn" aria-label="Notifications">
+        <RouterLink to="/notifications" class="customer-nav__icon-btn" aria-label="Notifications">
           <AppIcon name="bell" :size="20" />
-        </button>
+        </RouterLink>
         <RouterLink to="/settings" class="customer-nav__icon-btn" aria-label="Settings">
           <AppIcon name="gear" :size="20" />
         </RouterLink>

@@ -71,6 +71,14 @@ const router = createRouter({
       meta: { hideNavbar: true },
       component: () => import('../views/SettingsView.vue'),
     },
+    {
+      path: '/notifications',
+      name: 'notifications',
+      // Notification - Customer: authenticated customer screen with its own
+      // CustomerNavbar, so the public navbar is hidden here.
+      meta: { hideNavbar: true },
+      component: () => import('../views/NotificationsView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }
