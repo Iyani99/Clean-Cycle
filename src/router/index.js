@@ -79,6 +79,14 @@ const router = createRouter({
       meta: { hideNavbar: true },
       component: () => import('../views/NotificationsView.vue'),
     },
+    {
+      path: '/admin/dashboard',
+      name: 'admin-dashboard',
+      // Dashboard - Admin: renders its own AdminSidebar shell, so the public
+      // navbar is hidden here (same pattern as the customer screens).
+      meta: { hideNavbar: true },
+      component: () => import('../views/AdminDashboardView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }

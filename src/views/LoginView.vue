@@ -19,6 +19,10 @@ const router = useRouter()
 const email = ref('')
 const password = ref('')
 
+// Customer/Admin selector. Purely local UI state — it only decides where
+// onSubmit() navigates below, there is no real role or account behind it.
+const role = ref('customer')
+
 // Customer-area routes a public "Book Now" style CTA may ask Login to forward to
 // after submit. Anything not on this list falls back to the Dashboard, so an
 // odd or off-site `?redirect=` value can never send the visitor somewhere unsafe
@@ -27,6 +31,13 @@ const REDIRECT_ALLOWLIST = ['/dashboard', '/services', '/book', '/payment', '/tr
 
 function onSubmit() {
   // Prototype-only navigation: no credentials are checked and nothing is stored.
+  if (role.value === 'admin') {
+    // Admin mode ignores any customer `?redirect=` — a visitor who switched to
+    // Admin after arriving via a customer deep link should not land on a
+    // customer screen.
+    router.push('/admin/dashboard')
+    return
+  }
   // If the visitor arrived via a link like /login?redirect=/book, continue there;
   // otherwise go to the Customer Dashboard (the normal Login destination).
   const target = route.query.redirect
@@ -37,22 +48,26 @@ function onSubmit() {
 <template>
   <AuthLayout>
     <!--
-      Customer / Admin selector. The Admin Login is a separate approved Figma
-      screen that has not been built yet, so the Admin option is shown for
-      visual fidelity but is not wired to a route.
+      Customer / Admin selector. A separate "Admin - Login Page" Figma frame
+      exists but hasn't been built — this shared Login screen currently also
+      doubles as the Admin entry point, selecting where onSubmit() navigates.
     -->
     <div class="auth-toggle" role="group" aria-label="Account type">
       <button
         type="button"
-        class="auth-toggle__option auth-toggle__option--active"
-        aria-pressed="true"
+        class="auth-toggle__option"
+        :class="{ 'auth-toggle__option--active': role === 'customer' }"
+        :aria-pressed="role === 'customer'"
+        @click="role = 'customer'"
       >
         Customer
       </button>
       <button
         type="button"
         class="auth-toggle__option auth-toggle__option--admin"
-        aria-pressed="false"
+        :class="{ 'auth-toggle__option--active': role === 'admin' }"
+        :aria-pressed="role === 'admin'"
+        @click="role = 'admin'"
       >
         Admin
       </button>
@@ -128,6 +143,13 @@ function onSubmit() {
   font-weight: 600;
 }
 
+/* Customer has no background of its own (it just sits on the toggle's blue
+   bar), so give it a dimmed label when Admin is the one selected instead. */
+.auth-toggle__option:not(.auth-toggle__option--admin):not(.auth-toggle__option--active) {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
 .auth-toggle__option--admin {
   margin: -1px;
   background-color: var(--cc-surface);
@@ -135,6 +157,12 @@ function onSubmit() {
   font-weight: 500;
   border: 1px solid #5e5e5e;
   border-radius: 10px;
+}
+
+.auth-toggle__option--admin.auth-toggle__option--active {
+  font-weight: 700;
+  border-color: var(--cc-primary);
+  box-shadow: inset 0 0 0 1px var(--cc-primary);
 }
 
 /* Form -------------------------------------------------------------- */

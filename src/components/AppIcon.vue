@@ -62,6 +62,18 @@ const icons = {
     'M20 14a2 2 0 0 0-2-2h-1v6h1a2 2 0 0 0 2-2z',
     'M17 18a3 3 0 0 1-3 3h-2',
   ],
+  // Admin Dashboard glyphs (screenshot approximations)
+  grid: ['M4 4h7v7H4z', 'M13 4h7v7h-7z', 'M4 13h7v7H4z', 'M13 13h7v7h-7z'],
+  calendar: ['M4 5h16v15H4z', 'M16 3v4', 'M8 3v4', 'M4 10h16'],
+  users: [
+    'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2',
+    'M11 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',
+    'M22 21v-2a4 4 0 0 0-3-3.87',
+    'M17 3.13a4 4 0 0 1 0 7.75',
+  ],
+  'bar-chart': ['M4 20V10', 'M12 20V4', 'M20 20v-6'],
+  megaphone: ['M3 11l18-5v12L3 14v-3z', 'M11.6 16.8a3 3 0 1 1-5.8-1.6'],
+  'more-vertical': ['M12 5h.01', 'M12 12h.01', 'M12 19h.01'],
 }
 </script>
 
