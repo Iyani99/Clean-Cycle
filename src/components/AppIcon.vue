@@ -89,6 +89,8 @@ const icons = {
   ],
   map: ['M1 6v15l7-3 8 3 7-3V3l-7 3-8-3z', 'M8 3v15', 'M16 6v15'],
   route: ['M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4z', 'M18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4z', 'M8 17c4-1 4-9 8-11'],
+  // Reports Overview glyph
+  'x-circle': ['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', 'M15 9l-6 6', 'M9 9l6 6'],
 }
 </script>
 
