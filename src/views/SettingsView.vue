@@ -112,7 +112,11 @@ const language = ref('en-US')
                   rows="2"
                 ></textarea>
               </label>
-              <button type="submit" class="btn-primary profile__save">Save Changes</button>
+              <!-- formnovalidate: the approved Figma email has no "@", which native
+                   email validation would otherwise block before saveProfile() runs. -->
+              <button type="submit" formnovalidate class="btn-primary profile__save">
+                Save Changes
+              </button>
             </div>
 
             <p v-if="profileSaved" class="profile__saved-note" role="status">
