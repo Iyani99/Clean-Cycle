@@ -32,16 +32,13 @@ and a transaction and sales summary.
 This repository contains the frontend implementation, built from the team's
 approved Figma high-fidelity design.
 
-## Week 5 Scope
-
-For the Week 5 milestone (Frontend Project Setup and Code Repository), we focused
-on the project setup and a working public homepage with functional navigation
-between the completed pages.
+## Scope
 
 **This version is frontend-only.** It does not include a backend, a database,
-real authentication, real payments, or persistent booking. Screens that will
-later depend on those features are shown as static UI or simple placeholder
-pages.
+real authentication, real payments, or persistent booking. Screens use static
+sample data and simple local interactions (for example filtering a table,
+confirming a booking, or marking a notification as read), and everything resets
+when the page is refreshed.
 
 ## Technology Stack
 
@@ -56,24 +53,56 @@ pages.
 
 ## Current Status
 
-The public homepage is the only fully implemented screen from the Figma design.
-The approved Figma design was translated into reusable Vue components and
-responsive CSS, together with the site navigation. The Services, Book Now, Login,
-and Sign Up routes are placeholder pages that demonstrate working navigation —
-they are not finished screens.
+**Frontend Development Checkpoint 2: 17 of 21 planned screens are implemented
+(about 81%).** The screens follow the approved Figma design and are connected
+through working navigation (Vue Router). They are built from reusable Vue
+components and responsive CSS.
 
-### Implemented
+### Customer / public screens (10 of 10)
 
-- Public homepage — hero section and "Our Core Services" section
-- Responsive navigation bar
-- Reusable components: `AppNavbar`, `BaseButton`, `ServiceCard`, `PagePlaceholder`
+| Screen | Route |
+|---|---|
+| Home | `/` |
+| Login | `/login` |
+| Sign Up | `/signup` |
+| Dashboard | `/dashboard` |
+| Services | `/services` |
+| Book Now | `/book` |
+| Payment | `/payment` |
+| Service Tracking | `/tracking` |
+| Settings / Profile | `/settings` |
+| Notifications | `/notifications` |
 
-### Placeholder routes (navigation only)
+### Admin screens (7 of 11)
 
-- Services
-- Book Now
-- Login
-- Sign Up
+| Screen | Route |
+|---|---|
+| Dashboard | `/admin/dashboard` |
+| Booking Management | `/admin/bookings` |
+| Customer Management | `/admin/customers` |
+| Payment Management | `/admin/payments` |
+| Logistics Management | `/admin/logistics` |
+| Reports Overview | `/admin/reports` |
+| Notifications | `/admin/notifications` |
+
+### Remaining screens
+
+- Admin Settings
+- Admin New Record
+- Admin Login
+- Admin Signup
+
+### Trying the prototype
+
+There is no real login. On the Login screen, choose **Customer** or **Admin**,
+enter any email address and password, and submit to open the customer screens or
+the admin area. The Home page's **Book Now** and **Services** links also go
+through Login first.
+
+### Reusable components
+
+`AppNavbar`, `CustomerNavbar`, `BaseButton`, `ServiceCard`, `AuthLayout`,
+`BookingSection`, `AdminLayout`, `AdminSidebar`, and `AppIcon`.
 
 ## Getting Started
 
@@ -82,7 +111,7 @@ for the Vite/npm frontend tooling; the project has no Node.js backend.
 
 ```
 git clone https://github.com/Iyani99/Clean-Cycle.git
-cd clean-cycle
+cd Clean-Cycle
 npm install
 ```
 
@@ -103,5 +132,4 @@ npm install
 
 GitHub: https://github.com/Iyani99/Clean-Cycle.git
 
-This repository holds SYNAPSE's frontend implementation of Clean-Cycle for the
-Week 5 project requirement.
+This repository holds SYNAPSE's frontend implementation of Clean-Cycle.
