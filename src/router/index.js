@@ -135,6 +135,14 @@ const router = createRouter({
       meta: { hideNavbar: true },
       component: () => import('../views/AdminNotificationsView.vue'),
     },
+    {
+      path: '/admin/settings',
+      name: 'admin-settings',
+      // Settings - Admin: renders the same AdminSidebar shell (this frame also
+      // shows a Logout item), so the public navbar is hidden here.
+      meta: { hideNavbar: true },
+      component: () => import('../views/AdminSettingsView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }

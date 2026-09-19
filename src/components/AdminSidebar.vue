@@ -5,14 +5,21 @@ import logoIcon from '../assets/images/logo-icon.png'
 
 /**
  * Persistent left Admin sidebar (Figma "Dashboard - Admin"). Shared shell
- * intended for reuse across the remaining Admin screens.
+ * used by every Admin screen.
  *
- * Dashboard, Bookings, Customers, Payments, Logistics, Reports, and Notifications
- * have real screens; the rest stay visibly present (for fidelity) but non-navigating, matching
- * the same `to: null` pattern already used in `CustomerNavbar`. "+ New
- * Booking" is inert for the same reason — New Record Admin is a separate,
- * not-yet-built screen.
+ * All eight nav items link to real screens. The `to: null` (inert) branch is
+ * kept for any future item without a screen, matching the pattern already used
+ * in `CustomerNavbar`. "+ New Booking" stays inert — New Record Admin is a
+ * separate, not-yet-built screen.
+ *
+ * `showLogout` (opt-in, default off): the Settings frame is the only approved
+ * Admin frame that shows a Logout item above the profile block, so a screen
+ * enables it through `AdminLayout` rather than every Admin page getting it.
  */
+defineProps({
+  showLogout: { type: Boolean, default: false },
+})
+
 const navItems = [
   { key: 'dashboard', label: 'Dashboard', icon: 'grid', to: '/admin/dashboard' },
   { key: 'bookings', label: 'Bookings', icon: 'calendar', to: '/admin/bookings' },
@@ -21,7 +28,7 @@ const navItems = [
   { key: 'payments', label: 'Payments', icon: 'card', to: '/admin/payments' },
   { key: 'reports', label: 'Reports', icon: 'bar-chart', to: '/admin/reports' },
   { key: 'notifications', label: 'Notifications', icon: 'bell', to: '/admin/notifications' },
-  { key: 'settings', label: 'Settings', icon: 'gear', to: null },
+  { key: 'settings', label: 'Settings', icon: 'gear', to: '/admin/settings' },
 ]
 </script>
 
@@ -57,6 +64,12 @@ const navItems = [
           {{ item.label }}
         </span>
       </template>
+      <!-- Logout leaves the Admin area for the public home page, the same
+           destination as the Customer Settings Logout. Nothing is cleared. -->
+      <RouterLink v-if="showLogout" to="/" class="admin-sidebar__link admin-sidebar__logout">
+        <AppIcon name="logout" :size="18" />
+        Logout
+      </RouterLink>
     </nav>
 
     <div class="admin-sidebar__profile">
@@ -163,6 +176,11 @@ const navItems = [
   font-weight: 700;
 }
 
+/* Sits at the bottom of the nav column, just above the profile block. */
+.admin-sidebar__logout {
+  margin-top: auto;
+}
+
 .admin-sidebar__link--disabled {
   cursor: default;
 }
@@ -239,6 +257,10 @@ const navItems = [
     flex-wrap: wrap;
     order: 3;
     margin-top: 12px;
+  }
+
+  .admin-sidebar__logout {
+    margin-top: 0;
   }
 
   .admin-sidebar__profile {
