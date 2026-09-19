@@ -143,6 +143,13 @@ const router = createRouter({
       meta: { hideNavbar: true },
       component: () => import('../views/AdminSettingsView.vue'),
     },
+    {
+      // Catch-all for unknown URLs. Must stay LAST so it never shadows a real
+      // route. Not one of the approved screens; it keeps the public navbar.
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('../views/NotFoundView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }
