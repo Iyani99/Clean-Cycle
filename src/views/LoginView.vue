@@ -64,7 +64,7 @@ function onSubmit() {
       </button>
       <button
         type="button"
-        class="auth-toggle__option auth-toggle__option--admin"
+        class="auth-toggle__option"
         :class="{ 'auth-toggle__option--active': role === 'admin' }"
         :aria-pressed="role === 'admin'"
         @click="role = 'admin'"
@@ -125,44 +125,31 @@ function onSubmit() {
   border-radius: var(--cc-radius-sm);
 }
 
+/* Both segments share one look: a white pill when idle, filled blue when it is
+   the selected role, so the blue block always sits on the active side. */
 .auth-toggle__option {
+  position: relative;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: -1px;
   font-family: var(--cc-font-sans);
   font-size: 0.875rem;
+  font-weight: 500;
   line-height: 1;
-  background: none;
-  border: none;
+  color: #000000;
+  background-color: var(--cc-surface);
+  border: 1px solid #5e5e5e;
+  border-radius: 10px;
   cursor: pointer;
 }
 
 .auth-toggle__option--active {
+  z-index: 1;
   color: var(--cc-text-on-dark);
   font-weight: 600;
-}
-
-/* Customer has no background of its own (it just sits on the toggle's blue
-   bar), so give it a dimmed label when Admin is the one selected instead. */
-.auth-toggle__option:not(.auth-toggle__option--admin):not(.auth-toggle__option--active) {
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: 500;
-}
-
-.auth-toggle__option--admin {
-  margin: -1px;
-  background-color: var(--cc-surface);
-  color: #000000;
-  font-weight: 500;
-  border: 1px solid #5e5e5e;
-  border-radius: 10px;
-}
-
-.auth-toggle__option--admin.auth-toggle__option--active {
-  font-weight: 700;
-  border-color: var(--cc-primary);
-  box-shadow: inset 0 0 0 1px var(--cc-primary);
+  background-color: var(--cc-primary);
 }
 
 /* Form -------------------------------------------------------------- */
