@@ -7,18 +7,12 @@ import AdminSidebar from './AdminSidebar.vue'
  * the Dashboard — sidebar, flex row layout, main padding, and the ≤860px
  * breakpoint where `AdminSidebar` itself collapses to a horizontal bar.
  * Screen-specific content (headers, cards, tables) stays local to each view.
- *
- * `showLogout` is an opt-in that is passed straight to `AdminSidebar`; it
- * defaults to off so existing Admin screens are unchanged.
  */
-defineProps({
-  showLogout: { type: Boolean, default: false },
-})
 </script>
 
 <template>
   <div class="admin-layout">
-    <AdminSidebar :show-logout="showLogout" />
+    <AdminSidebar />
     <main class="admin-layout__main">
       <slot />
     </main>

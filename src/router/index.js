@@ -138,8 +138,8 @@ const router = createRouter({
     {
       path: '/admin/settings',
       name: 'admin-settings',
-      // Settings - Admin: renders the same AdminSidebar shell (this frame also
-      // shows a Logout item), so the public navbar is hidden here.
+      // Settings - Admin: renders the same AdminSidebar shell, so the public
+      // navbar is hidden here.
       meta: { hideNavbar: true },
       component: () => import('../views/AdminSettingsView.vue'),
     },

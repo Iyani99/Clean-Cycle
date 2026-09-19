@@ -58,7 +58,7 @@ onBeforeUnmount(() => clearTimeout(savedTimer))
 </script>
 
 <template>
-  <AdminLayout show-logout>
+  <AdminLayout>
     <header class="settings-header">
       <h1 class="settings-header__title">Admin Settings</h1>
       <p class="settings-header__subtitle">

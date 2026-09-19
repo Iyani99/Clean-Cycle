@@ -12,13 +12,10 @@ import logoIcon from '../assets/images/logo-icon.png'
  * in `CustomerNavbar`. "+ New Booking" stays inert — New Record Admin is a
  * separate, not-yet-built screen.
  *
- * `showLogout` (opt-in, default off): the Settings frame is the only approved
- * Admin frame that shows a Logout item above the profile block, so a screen
- * enables it through `AdminLayout` rather than every Admin page getting it.
+ * Logout is shown on every Admin screen, above the profile block. It goes to
+ * `/login`, which already has the Customer/Admin selector, so the role can be
+ * switched easily while demoing. There is no real auth, so nothing is cleared.
  */
-defineProps({
-  showLogout: { type: Boolean, default: false },
-})
 
 const navItems = [
   { key: 'dashboard', label: 'Dashboard', icon: 'grid', to: '/admin/dashboard' },
@@ -64,9 +61,7 @@ const navItems = [
           {{ item.label }}
         </span>
       </template>
-      <!-- Logout leaves the Admin area for the public home page, the same
-           destination as the Customer Settings Logout. Nothing is cleared. -->
-      <RouterLink v-if="showLogout" to="/" class="admin-sidebar__link admin-sidebar__logout">
+      <RouterLink to="/login" class="admin-sidebar__link admin-sidebar__logout">
         <AppIcon name="logout" :size="18" />
         Logout
       </RouterLink>

@@ -176,7 +176,7 @@ const language = ref('en-US')
           </div>
         </section>
 
-        <RouterLink to="/" class="logout settings__logout">
+        <RouterLink to="/login" class="logout settings__logout">
           <AppIcon name="logout" :size="18" />
           Logout
         </RouterLink>
