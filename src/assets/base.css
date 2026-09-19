@@ -21,6 +21,9 @@
   --cc-border: #e0e3e5;
   --cc-border-strong: #c3c6d5;
 
+  /* Feedback */
+  --cc-error: #d13d4a; /* inline validation messages */
+
   /* Radii */
   --cc-radius-sm: 8px;
   --cc-radius-lg: 12px;

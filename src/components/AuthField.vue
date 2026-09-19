@@ -2,6 +2,7 @@
 /**
  * One labelled text field for the customer auth forms.
  * Optional left icon (used by Login's email / password rows; Signup has none).
+ * Optional `error` shows an inline message under the field and marks it invalid.
  */
 defineProps({
   id: { type: String, required: true },
@@ -12,6 +13,7 @@ defineProps({
   autocomplete: { type: String, default: 'off' },
   inputmode: { type: String, default: null },
   required: { type: Boolean, default: false },
+  error: { type: String, default: '' },
   icon: { type: String, default: '' },
   iconWidth: { type: [String, Number], default: 16 },
   iconHeight: { type: [String, Number], default: 16 },
@@ -41,9 +43,12 @@ defineEmits(['update:modelValue'])
         :autocomplete="autocomplete"
         :inputmode="inputmode"
         :required="required"
+        :aria-invalid="error ? 'true' : null"
+        :aria-describedby="error ? `${id}-error` : null"
         @input="$emit('update:modelValue', $event.target.value)"
       />
     </div>
+    <p v-if="error" :id="`${id}-error`" class="auth-field__error" role="alert">{{ error }}</p>
   </div>
 </template>
 
@@ -94,9 +99,20 @@ defineEmits(['update:modelValue'])
   color: var(--cc-border-strong);
 }
 
+.auth-field__input[aria-invalid='true'] {
+  border-color: var(--cc-error);
+}
+
 .auth-field__input:focus {
   outline: none;
   border-color: var(--cc-primary);
   box-shadow: 0 0 0 3px rgba(0, 60, 144, 0.12);
+}
+
+.auth-field__error {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--cc-error);
 }
 </style>

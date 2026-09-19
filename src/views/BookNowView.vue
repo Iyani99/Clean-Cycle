@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { computed, nextTick, reactive, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import CustomerNavbar from '../components/CustomerNavbar.vue'
 import AppIcon from '../components/AppIcon.vue'
@@ -47,7 +47,58 @@ const form = reactive({
 })
 const submitted = ref(false)
 
+// Everything except "Special Instructions (Optional)" is required. Messages only
+// appear after a failed "Confirm Booking" and clear live as the form is fixed.
+const attempted = ref(false)
+
+const missing = computed(() => ({
+  services: !Object.values(selectedServices).some(Boolean),
+  logistics: !logistics.value,
+  date: !form.date,
+  time: !form.time,
+  fullName: !form.fullName.trim(),
+  phone: !form.phone.trim(),
+  address: !form.address.trim(),
+  payment: !payment.value,
+}))
+
+const contactLabels = { fullName: 'full name', phone: 'phone number', address: 'address' }
+
+// One message per form section ('' when that section is complete).
+const errors = computed(() => {
+  const m = missing.value
+  const contact = Object.keys(contactLabels)
+    .filter((key) => m[key])
+    .map((key) => contactLabels[key])
+  return {
+    services: m.services ? 'Select at least one service.' : '',
+    logistics: m.logistics ? 'Choose a logistics option.' : '',
+    scheduling:
+      m.date && m.time
+        ? 'Choose a preferred date and time.'
+        : m.date
+          ? 'Choose a preferred date.'
+          : m.time
+            ? 'Choose a preferred time.'
+            : '',
+    contact: contact.length
+      ? `Enter your ${new Intl.ListFormat('en', { type: 'conjunction' }).format(contact)}.`
+      : '',
+    payment: m.payment ? 'Choose a payment method.' : '',
+  }
+})
+
+const hasErrors = computed(() => Object.values(errors.value).some(Boolean))
+const showErrors = computed(() => attempted.value && !submitted.value)
+const invalid = (key) => (showErrors.value && missing.value[key] ? 'true' : null)
+
 function confirmBooking() {
+  attempted.value = true
+  if (hasErrors.value) {
+    // "Confirm Booking" is at the bottom, so bring the first problem into view.
+    nextTick(() => document.querySelector('.book__error')?.scrollIntoView({ block: 'center' }))
+    return
+  }
   // Frontend prototype: no request is sent, nothing is stored.
   submitted.value = true
 }
@@ -83,6 +134,9 @@ function confirmBooking() {
               />
             </label>
           </div>
+          <p v-if="showErrors && errors.services" class="book__error" role="alert">
+            {{ errors.services }}
+          </p>
         </BookingSection>
 
         <BookingSection :step="2" title="Logistics">
@@ -104,19 +158,35 @@ function confirmBooking() {
               <span class="opt__label">{{ option.label }}</span>
             </label>
           </div>
+          <p v-if="showErrors && errors.logistics" class="book__error" role="alert">
+            {{ errors.logistics }}
+          </p>
         </BookingSection>
 
         <BookingSection :step="3" title="Scheduling">
           <div class="grid-2">
             <label class="field">
               <span class="field__label">Preferred Date</span>
-              <input v-model="form.date" type="date" class="field__control" />
+              <input
+                v-model="form.date"
+                type="date"
+                class="field__control"
+                :aria-invalid="invalid('date')"
+              />
             </label>
             <label class="field">
               <span class="field__label">Preferred Time</span>
-              <input v-model="form.time" type="time" class="field__control" />
+              <input
+                v-model="form.time"
+                type="time"
+                class="field__control"
+                :aria-invalid="invalid('time')"
+              />
             </label>
           </div>
+          <p v-if="showErrors && errors.scheduling" class="book__error" role="alert">
+            {{ errors.scheduling }}
+          </p>
         </BookingSection>
 
         <BookingSection :step="4" title="Contact Information">
@@ -124,16 +194,31 @@ function confirmBooking() {
             <div class="grid-2">
               <label class="field">
                 <span class="field__label">Full Name</span>
-                <input v-model="form.fullName" type="text" class="field__control" />
+                <input
+                  v-model="form.fullName"
+                  type="text"
+                  class="field__control"
+                  :aria-invalid="invalid('fullName')"
+                />
               </label>
               <label class="field">
                 <span class="field__label">Phone Number</span>
-                <input v-model="form.phone" type="tel" class="field__control" />
+                <input
+                  v-model="form.phone"
+                  type="tel"
+                  class="field__control"
+                  :aria-invalid="invalid('phone')"
+                />
               </label>
             </div>
             <label class="field">
               <span class="field__label">Address</span>
-              <input v-model="form.address" type="text" class="field__control" />
+              <input
+                v-model="form.address"
+                type="text"
+                class="field__control"
+                :aria-invalid="invalid('address')"
+              />
             </label>
             <label class="field">
               <span class="field__label">Special Instructions (Optional)</span>
@@ -145,6 +230,9 @@ function confirmBooking() {
               ></textarea>
             </label>
           </div>
+          <p v-if="showErrors && errors.contact" class="book__error" role="alert">
+            {{ errors.contact }}
+          </p>
         </BookingSection>
 
         <BookingSection :step="5" title="Payment Method">
@@ -166,7 +254,14 @@ function confirmBooking() {
               <span class="opt__label">{{ option.label }}</span>
             </label>
           </div>
+          <p v-if="showErrors && errors.payment" class="book__error" role="alert">
+            {{ errors.payment }}
+          </p>
         </BookingSection>
+
+        <p v-if="showErrors && hasErrors" class="book__error" role="alert">
+          Some required details are missing. Please check the sections above.
+        </p>
 
         <template v-if="submitted">
           <p class="book__done" role="status">
@@ -390,6 +485,10 @@ function confirmBooking() {
   color: #8b8f9a;
 }
 
+.field__control[aria-invalid='true'] {
+  border-color: var(--cc-error);
+}
+
 .field__control:focus {
   outline: none;
   border-color: var(--cc-primary);
@@ -403,6 +502,18 @@ function confirmBooking() {
 }
 
 /* Confirmation + submit ------------------------------------- */
+.book__error {
+  margin-top: 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--cc-error);
+}
+
+.book__form > .book__error {
+  margin-top: 0;
+}
+
 .book__done {
   padding: 14px 16px;
   border: 1px solid var(--cc-primary);

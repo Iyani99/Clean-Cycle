@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import AuthLayout from '../components/AuthLayout.vue'
 import AuthField from '../components/AuthField.vue'
@@ -19,7 +19,34 @@ const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 
+// The inputs' native `required` already blocks empty fields. These inline errors
+// cover what the browser can't check: whitespace-only values and the password
+// confirmation.
+const errors = reactive({ fullName: '', phone: '', confirmPassword: '' })
+
+// Clear an error as soon as the visitor edits the field it belongs to.
+watch(fullName, () => (errors.fullName = ''))
+watch(phone, () => (errors.phone = ''))
+watch([password, confirmPassword], () => (errors.confirmPassword = ''))
+
 function onSubmit() {
+  errors.fullName = fullName.value.trim() ? '' : 'Please enter your full name.'
+  errors.phone = phone.value.trim() ? '' : 'Please enter your phone number.'
+  errors.confirmPassword =
+    password.value === confirmPassword.value ? '' : 'Passwords do not match.'
+
+  const firstInvalid = errors.fullName
+    ? 'signup-name'
+    : errors.phone
+      ? 'signup-phone'
+      : errors.confirmPassword
+        ? 'signup-confirm'
+        : ''
+  if (firstInvalid) {
+    document.getElementById(firstInvalid)?.focus()
+    return
+  }
+
   // Prototype-only: no account is created and nothing is stored. Submitting the
   // form moves to the Login screen, the natural next step after registering.
   router.push('/login')
@@ -36,6 +63,7 @@ function onSubmit() {
         autocomplete="name"
         placeholder="Juan Dela Cruz"
         required
+        :error="errors.fullName"
       />
       <AuthField
         id="signup-phone"
@@ -46,6 +74,7 @@ function onSubmit() {
         autocomplete="tel"
         placeholder="0912 345 6789"
         required
+        :error="errors.phone"
       />
       <AuthField
         id="signup-email"
@@ -74,6 +103,7 @@ function onSubmit() {
         autocomplete="new-password"
         placeholder="Confirm Password"
         required
+        :error="errors.confirmPassword"
       />
 
       <AuthSubmit label="Sign Up" class="signup-form__submit" />
