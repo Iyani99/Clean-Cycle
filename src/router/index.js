@@ -153,6 +153,16 @@ const router = createRouter({
       component: () => import('../views/AdminNewBookingView.vue'),
     },
     {
+      path: '/admin/settings/admins/new',
+      name: 'admin-create-account',
+      // Create Admin Account (Figma "Admin - SignUp Page", reinterpreted as an
+      // internal screen reached from Admin Settings). Uses the auth-style
+      // full-page layout with no sidebar, so the public navbar is hidden.
+      // Not protected: there is no real auth in this frontend prototype.
+      meta: { hideNavbar: true },
+      component: () => import('../views/AdminCreateAccountView.vue'),
+    },
+    {
       // Catch-all for unknown URLs. Must stay LAST so it never shadows a real
       // route. Not one of the approved screens; it keeps the public navbar.
       path: '/:pathMatch(.*)*',

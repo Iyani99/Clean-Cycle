@@ -8,7 +8,17 @@ import logoIcon from '../assets/images/logo-icon.png'
  * Both Figma frames use the same background, decorative blob, "Back to Home
  * Page" pill, centered white card, and CLEAN-CYCLE logo lockup — this component
  * owns all of that; each screen fills the card via the default slot.
+ *
+ * The top-right pill defaults to "Back to Home Page" and the logo links Home;
+ * the Admin account screen overrides them through `backTo` / `backLabel` /
+ * `logoTo` / `logoAriaLabel`.
  */
+defineProps({
+  backTo: { type: String, default: '/' },
+  backLabel: { type: String, default: 'Back to Home Page' },
+  logoTo: { type: String, default: '/' },
+  logoAriaLabel: { type: String, default: 'Clean-Cycle home' },
+})
 </script>
 
 <template>
@@ -18,11 +28,11 @@ import logoIcon from '../assets/images/logo-icon.png'
     </div>
 
     <div class="auth-page__back">
-      <BaseButton to="/" variant="primary">Back to Home Page</BaseButton>
+      <BaseButton :to="backTo" variant="primary">{{ backLabel }}</BaseButton>
     </div>
 
     <section class="auth-card">
-      <RouterLink to="/" class="auth-card__logo" aria-label="Clean-Cycle home">
+      <RouterLink :to="logoTo" class="auth-card__logo" :aria-label="logoAriaLabel">
         <img :src="logoIcon" alt="" class="auth-card__logo-icon" width="92" height="62" />
         <span class="auth-card__wordmark">
           <span class="auth-card__wordmark--clean">CLEAN</span><span>-</span><span

@@ -1,5 +1,6 @@
 <script setup>
 import { onBeforeUnmount, reactive, ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import AdminLayout from '../components/AdminLayout.vue'
 import AppIcon from '../components/AppIcon.vue'
 
@@ -13,7 +14,8 @@ import AppIcon from '../components/AppIcon.vue'
  *
  * "Change Password", "View Sessions" and "Contact Support" are intentionally
  * inert: the approved frame shows no password form, sessions list, or support
- * destination for them to open. The branch select lists only the one branch the
+ * destination for them to open. "Add Administrator" (Security) is a later
+ * addition that links to the Create Admin Account screen. The branch select lists only the one branch the
  * frame proves. The avatar is the shared user glyph (no photo asset exists in
  * the project).
  */
@@ -153,6 +155,18 @@ onBeforeUnmount(() => clearTimeout(savedTimer))
                 View Sessions
                 <AppIcon name="arrow-right" :size="14" />
               </button>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-row__text">
+                <span class="setting-row__label">Administrator Accounts</span>
+                <span class="setting-row__desc">
+                  Create another account with access to the Admin system.
+                </span>
+              </div>
+              <RouterLink to="/admin/settings/admins/new" class="outline-btn">
+                Add Administrator
+              </RouterLink>
             </div>
           </div>
         </section>
@@ -439,6 +453,9 @@ onBeforeUnmount(() => clearTimeout(savedTimer))
 }
 
 .outline-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   min-width: 137px;
   padding: 7px 14px;
