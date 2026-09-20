@@ -48,9 +48,9 @@ function onSubmit() {
 <template>
   <AuthLayout>
     <!--
-      Customer / Admin selector. A separate "Admin - Login Page" Figma frame
-      exists but hasn't been built — this shared Login screen currently also
-      doubles as the Admin entry point, selecting where onSubmit() navigates.
+      Customer / Admin selector. This shared Login screen covers both the
+      approved Customer Login and Admin Login states; the selected role only
+      decides where onSubmit() navigates.
     -->
     <div class="auth-toggle" role="group" aria-label="Account type">
       <button
@@ -106,7 +106,8 @@ function onSubmit() {
       <AuthSubmit label="Log In" class="login-form__submit" />
     </form>
 
-    <p class="login-footer">
+    <!-- Signup is public for Customers only; Admin accounts are not self-registered. -->
+    <p v-if="role === 'customer'" class="login-footer">
       Don't have an account?
       <RouterLink to="/signup" class="login-footer__link">Sign Up</RouterLink>
     </p>
