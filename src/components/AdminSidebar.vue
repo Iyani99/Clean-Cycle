@@ -1,7 +1,16 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import AppIcon from './AppIcon.vue'
 import logoIcon from '../assets/images/logo-icon.png'
+
+defineProps({
+  showNewBooking: { type: Boolean, default: true },
+})
+
+// `router-link-active` only matches a link's own route record, so a sub-page
+// such as /admin/bookings/new would not light up "Bookings". Match by path.
+const route = useRoute()
+const isCurrent = (to) => route.path === to || route.path.startsWith(`${to}/`)
 
 /**
  * Persistent left Admin sidebar (Figma "Dashboard - Admin"). Shared shell
@@ -9,8 +18,8 @@ import logoIcon from '../assets/images/logo-icon.png'
  *
  * All eight nav items link to real screens. The `to: null` (inert) branch is
  * kept for any future item without a screen, matching the pattern already used
- * in `CustomerNavbar`. "+ New Booking" stays inert — New Record Admin is a
- * separate, not-yet-built screen.
+ * in `CustomerNavbar`. "+ New Booking" opens the Add New Booking screen; that
+ * screen's frame has no such button, so it passes `showNewBooking` = false.
  *
  * Logout is shown on every Admin screen, above the profile block. It goes to
  * `/login`, which already has the Customer/Admin selector, so the role can be
@@ -41,14 +50,19 @@ const navItems = [
       </span>
     </RouterLink>
 
-    <button type="button" class="admin-sidebar__new-booking">
+    <RouterLink v-if="showNewBooking" to="/admin/bookings/new" class="admin-sidebar__new-booking">
       <AppIcon name="plus" :size="16" />
       New Booking
-    </button>
+    </RouterLink>
 
     <nav class="admin-sidebar__nav" aria-label="Admin">
       <template v-for="item in navItems" :key="item.key">
-        <RouterLink v-if="item.to" :to="item.to" class="admin-sidebar__link">
+        <RouterLink
+          v-if="item.to"
+          :to="item.to"
+          class="admin-sidebar__link"
+          :class="{ 'admin-sidebar__link--current': isCurrent(item.to) }"
+        >
           <AppIcon :name="item.icon" :size="18" />
           {{ item.label }}
         </RouterLink>
@@ -165,7 +179,8 @@ const navItems = [
   background-color: var(--cc-bg);
 }
 
-.admin-sidebar__link.router-link-active {
+.admin-sidebar__link.router-link-active,
+.admin-sidebar__link--current {
   background-color: #e7f0fa;
   color: var(--cc-primary);
   font-weight: 700;

@@ -7,12 +7,18 @@ import AdminSidebar from './AdminSidebar.vue'
  * the Dashboard — sidebar, flex row layout, main padding, and the ≤860px
  * breakpoint where `AdminSidebar` itself collapses to a horizontal bar.
  * Screen-specific content (headers, cards, tables) stays local to each view.
+ *
+ * `showNewBooking` is passed straight to the sidebar; only the Add New Booking
+ * screen turns it off.
  */
+defineProps({
+  showNewBooking: { type: Boolean, default: true },
+})
 </script>
 
 <template>
   <div class="admin-layout">
-    <AdminSidebar />
+    <AdminSidebar :show-new-booking="showNewBooking" />
     <main class="admin-layout__main">
       <slot />
     </main>

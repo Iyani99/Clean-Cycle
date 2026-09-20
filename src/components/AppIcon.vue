@@ -93,6 +93,13 @@ const icons = {
   'x-circle': ['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', 'M15 9l-6 6', 'M9 9l6 6'],
   // Admin Settings glyph
   info: ['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', 'M12 16v-4', 'M12 8h.01'],
+  // Add New Booking glyphs
+  'help-circle': [
+    'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z',
+    'M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3',
+    'M12 17h.01',
+  ],
+  basket: ['M3 10h18', 'M5 10l1.5 9h11L19 10', 'M8 10l4-6 4 6'],
 }
 </script>
 

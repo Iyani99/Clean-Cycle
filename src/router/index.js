@@ -144,6 +144,15 @@ const router = createRouter({
       component: () => import('../views/AdminSettingsView.vue'),
     },
     {
+      path: '/admin/bookings/new',
+      name: 'admin-booking-new',
+      // Add New Booking - Admin (Figma "New Record"): child of Booking
+      // Management and the target of "+ New Booking". Same AdminSidebar shell,
+      // so the public navbar is hidden here.
+      meta: { hideNavbar: true },
+      component: () => import('../views/AdminNewBookingView.vue'),
+    },
+    {
       // Catch-all for unknown URLs. Must stay LAST so it never shadows a real
       // route. Not one of the approved screens; it keeps the public navbar.
       path: '/:pathMatch(.*)*',

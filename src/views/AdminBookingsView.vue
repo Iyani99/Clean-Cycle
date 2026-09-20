@@ -1,5 +1,6 @@
 <script setup>
 import { computed, reactive, ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import AdminLayout from '../components/AdminLayout.vue'
 import AppIcon from '../components/AppIcon.vue'
 
@@ -54,10 +55,10 @@ function confirmBooking(booking) {
         <h1 class="bookings-header__title">Booking Management</h1>
         <p class="bookings-header__subtitle">Manage and track all customer laundry orders.</p>
       </div>
-      <button type="button" class="new-booking-btn">
+      <RouterLink to="/admin/bookings/new" class="new-booking-btn">
         <AppIcon name="plus" :size="16" />
         New Booking
-      </button>
+      </RouterLink>
     </header>
 
     <section class="filter-card" aria-label="Filter and search bookings">
