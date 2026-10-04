@@ -92,6 +92,7 @@ function onSubmit() {
         v-model="password"
         label="Password"
         type="password"
+        revealable
         autocomplete="current-password"
         placeholder="••••••••"
         :icon="keyIcon"

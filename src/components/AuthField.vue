@@ -1,14 +1,18 @@
 <script setup>
+import { computed, ref } from 'vue'
+import AppIcon from './AppIcon.vue'
+
 /**
  * One labelled text field for the customer auth forms.
  * Optional left icon (used by Login's email / password rows; Signup has none).
  * Optional `error` shows an inline message under the field and marks it invalid.
  */
-defineProps({
+const props = defineProps({
   id: { type: String, required: true },
   label: { type: String, required: true },
   modelValue: { type: String, default: '' },
   type: { type: String, default: 'text' },
+  revealable: { type: Boolean, default: false },
   placeholder: { type: String, default: '' },
   autocomplete: { type: String, default: 'off' },
   inputmode: { type: String, default: null },
@@ -20,12 +24,21 @@ defineProps({
 })
 
 defineEmits(['update:modelValue'])
+
+const passwordVisible = ref(false)
+const canReveal = computed(() => props.revealable && props.type === 'password')
 </script>
 
 <template>
   <div class="auth-field">
     <label class="auth-field__label" :for="id">{{ label }}</label>
-    <div class="auth-field__control" :class="{ 'auth-field__control--with-icon': icon }">
+    <div
+      class="auth-field__control"
+      :class="{
+        'auth-field__control--with-icon': icon,
+        'auth-field__control--revealable': canReveal,
+      }"
+    >
       <img
         v-if="icon"
         :src="icon"
@@ -37,7 +50,7 @@ defineEmits(['update:modelValue'])
       <input
         :id="id"
         class="auth-field__input"
-        :type="type"
+        :type="canReveal && passwordVisible ? 'text' : type"
         :value="modelValue"
         :placeholder="placeholder"
         :autocomplete="autocomplete"
@@ -47,6 +60,17 @@ defineEmits(['update:modelValue'])
         :aria-describedby="error ? `${id}-error` : null"
         @input="$emit('update:modelValue', $event.target.value)"
       />
+      <button
+        v-if="canReveal"
+        type="button"
+        class="auth-field__reveal"
+        :aria-label="passwordVisible ? 'Hide password' : 'Show password'"
+        :aria-pressed="passwordVisible"
+        :aria-controls="id"
+        @click="passwordVisible = !passwordVisible"
+      >
+        <AppIcon :name="passwordVisible ? 'eye-off' : 'eye'" :size="18" />
+      </button>
     </div>
     <p v-if="error" :id="`${id}-error`" class="auth-field__error" role="alert">{{ error }}</p>
   </div>
@@ -93,6 +117,35 @@ defineEmits(['update:modelValue'])
 
 .auth-field__control--with-icon .auth-field__input {
   padding-left: 41px;
+}
+
+.auth-field__control--revealable .auth-field__input {
+  padding-right: 45px;
+}
+
+.auth-field__reveal {
+  position: absolute;
+  right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--cc-primary);
+  background: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.auth-field__reveal:hover {
+  background-color: rgba(0, 60, 144, 0.06);
+}
+
+.auth-field__reveal:focus-visible {
+  outline: 2px solid var(--cc-primary);
+  outline-offset: 1px;
 }
 
 .auth-field__input::placeholder {
