@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import AppIcon from '../components/AppIcon.vue'
 
 /**
  * Payment Page - Customer (Figma frame "Payment Page - Customer").
@@ -67,8 +68,14 @@ function confirmBooking() {
         <span class="srow__value srow__value--total">{{ peso(estimatedTotal) }}</span>
       </div>
 
-      <button type="button" class="summary__confirm" @click="confirmBooking">
-        Confirm Booking
+      <button
+        type="button"
+        class="summary__confirm"
+        :disabled="confirmed"
+        @click="confirmBooking"
+      >
+        {{ confirmed ? 'Booking Confirmed' : 'Confirm Booking' }}
+        <AppIcon v-if="confirmed" name="check" :size="16" />
       </button>
 
       <p v-if="confirmed" class="summary__confirmed" role="status">
@@ -144,6 +151,10 @@ function confirmBooking() {
 }
 
 .summary__confirm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
   margin-top: 32px;
   padding: 14px 24px;
@@ -158,8 +169,15 @@ function confirmBooking() {
   cursor: pointer;
 }
 
-.summary__confirm:hover {
+.summary__confirm:enabled:hover {
   background-color: #002d6d;
+}
+
+.summary__confirm:disabled {
+  background-color: #157347;
+  color: var(--cc-text-on-dark);
+  opacity: 1;
+  cursor: default;
 }
 
 .summary__confirmed {
