@@ -93,10 +93,20 @@ function toggleDetail(notification) {
           </span>
           <div class="notif-card__body">
             <p class="notif-card__title">{{ notification.title }}</p>
-            <button type="button" class="notif-card__details" @click="toggleDetail(notification)">
-              Details
+            <button
+              type="button"
+              class="notif-card__details"
+              :aria-expanded="notification.showDetail"
+              :aria-controls="`notification-detail-${notification.id}`"
+              @click="toggleDetail(notification)"
+            >
+              {{ notification.showDetail ? 'Hide details' : 'Details' }}
             </button>
-            <p v-if="notification.showDetail" class="notif-card__detail-text">
+            <p
+              v-show="notification.showDetail"
+              :id="`notification-detail-${notification.id}`"
+              class="notif-card__detail-text"
+            >
               {{ notification.detail }}
             </p>
           </div>

@@ -47,6 +47,7 @@ function onSubmit() {
 
 <template>
   <AuthLayout>
+    <h1 class="visually-hidden">{{ role === 'admin' ? 'Admin Login' : 'Customer Login' }}</h1>
     <!--
       Customer / Admin selector. This shared Login screen covers both the
       approved Customer Login and Admin Login states; the selected role only
@@ -116,6 +117,15 @@ function onSubmit() {
 </template>
 
 <style scoped>
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 /* Customer / Admin toggle (Login only) ------------------------------- */
 .auth-toggle {
   position: relative;

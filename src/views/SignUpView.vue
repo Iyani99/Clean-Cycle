@@ -55,6 +55,7 @@ function onSubmit() {
 
 <template>
   <AuthLayout>
+    <h1 class="visually-hidden">Create Customer Account</h1>
     <form class="signup-form" @submit.prevent="onSubmit">
       <AuthField
         id="signup-name"
@@ -118,6 +119,15 @@ function onSubmit() {
 </template>
 
 <style scoped>
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 .signup-form {
   display: flex;
   flex-direction: column;
