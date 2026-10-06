@@ -7,11 +7,12 @@
 defineProps({
   step: { type: [Number, String], required: true },
   title: { type: String, required: true },
+  complete: { type: Boolean, default: false },
 })
 </script>
 
 <template>
-  <section class="booking-section">
+  <section class="booking-section" :class="{ 'booking-section--complete': complete }">
     <header class="booking-section__head">
       <span class="booking-section__badge">{{ step }}</span>
       <h2 class="booking-section__title">{{ title }}</h2>
@@ -28,6 +29,11 @@ defineProps({
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius-lg);
   padding: 24px;
+  transition: border-color 160ms ease;
+}
+
+.booking-section--complete {
+  border-color: rgba(21, 115, 71, 0.55);
 }
 
 .booking-section__head {
@@ -55,5 +61,11 @@ defineProps({
   font-size: 1.0625rem;
   font-weight: 700;
   color: var(--cc-heading);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booking-section {
+    transition: none;
+  }
 }
 </style>

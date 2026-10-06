@@ -121,9 +121,11 @@ const links = [
   color: var(--cc-text);
   padding: 6px 0;
   border-bottom: 2px solid transparent;
+  transition: color 160ms ease, border-color 160ms ease;
 }
 
-.customer-nav__link:hover {
+.customer-nav__link:hover,
+.customer-nav__link:focus-visible {
   color: var(--cc-primary);
 }
 
@@ -160,9 +162,11 @@ const links = [
   border: none;
   border-radius: 999px;
   cursor: pointer;
+  transition: color 160ms ease, background-color 160ms ease;
 }
 
-.customer-nav__icon-btn:hover {
+.customer-nav__icon-btn:hover,
+.customer-nav__icon-btn:focus-visible {
   color: var(--cc-primary);
   background-color: var(--cc-bg);
 }

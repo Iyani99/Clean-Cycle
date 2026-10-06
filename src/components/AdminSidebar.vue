@@ -151,9 +151,11 @@ const navItems = [
   font-size: 0.875rem;
   font-weight: 700;
   cursor: pointer;
+  transition: background-color 160ms ease;
 }
 
-.admin-sidebar__new-booking:hover {
+.admin-sidebar__new-booking:hover,
+.admin-sidebar__new-booking:focus-visible {
   background-color: #002d6d;
 }
 
@@ -173,9 +175,11 @@ const navItems = [
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--cc-text);
+  transition: color 160ms ease, background-color 160ms ease;
 }
 
-.admin-sidebar__link:hover {
+.admin-sidebar__link:hover,
+.admin-sidebar__link:focus-visible {
   background-color: var(--cc-bg);
 }
 

@@ -226,10 +226,19 @@ function confirmBooking(booking) {
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
-.filter-pill:hover {
-  background-color: var(--cc-bg);
+.filter-pill:hover,
+.filter-pill:focus-visible {
+  border-color: var(--cc-secondary);
+  background-color: #e7f0fa;
+  color: var(--cc-primary);
+}
+
+.filter-pill:focus-visible {
+  outline: 2px solid var(--cc-primary);
+  outline-offset: 2px;
 }
 
 .filter-pill--active {
@@ -238,8 +247,11 @@ function confirmBooking(booking) {
   color: var(--cc-text-on-dark);
 }
 
-.filter-pill--active:hover {
+.filter-pill--active:hover,
+.filter-pill--active:focus-visible {
+  border-color: var(--cc-primary);
   background-color: var(--cc-primary);
+  color: var(--cc-text-on-dark);
 }
 
 .search-box {

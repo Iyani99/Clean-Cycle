@@ -106,9 +106,11 @@ const navLinks = [
   color: var(--cc-text);
   padding: 6px 0;
   border-bottom: 2px solid transparent;
+  transition: color 160ms ease, border-color 160ms ease;
 }
 
-.navbar__link:hover {
+.navbar__link:hover,
+.navbar__link:focus-visible {
   color: var(--cc-primary);
 }
 

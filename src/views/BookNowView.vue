@@ -118,7 +118,7 @@ function confirmBooking() {
       </header>
 
       <form class="book__form" @submit.prevent="confirmBooking">
-        <BookingSection :step="1" title="Select Services">
+        <BookingSection :step="1" title="Select Services" :complete="!missing.services">
           <div class="grid-2">
             <label
               v-for="service in services"
@@ -143,7 +143,7 @@ function confirmBooking() {
           </p>
         </BookingSection>
 
-        <BookingSection :step="2" title="Logistics">
+        <BookingSection :step="2" title="Logistics" :complete="!missing.logistics">
           <div class="grid-3">
             <label
               v-for="option in logisticsOptions"
@@ -168,7 +168,7 @@ function confirmBooking() {
           </p>
         </BookingSection>
 
-        <BookingSection :step="3" title="Scheduling">
+        <BookingSection :step="3" title="Scheduling" :complete="!missing.date && !missing.time">
           <div class="grid-2">
             <label class="field">
               <span class="field__label">Preferred Date</span>
@@ -194,7 +194,11 @@ function confirmBooking() {
           </p>
         </BookingSection>
 
-        <BookingSection :step="4" title="Contact Information">
+        <BookingSection
+          :step="4"
+          title="Contact Information"
+          :complete="!missing.fullName && !missing.phone && !missing.address"
+        >
           <div class="stack">
             <div class="grid-2">
               <label class="field">
@@ -240,7 +244,7 @@ function confirmBooking() {
           </p>
         </BookingSection>
 
-        <BookingSection :step="5" title="Payment Method">
+        <BookingSection :step="5" title="Payment Method" :complete="!missing.payment">
           <div class="grid-2">
             <label
               v-for="option in paymentOptions"
@@ -463,6 +467,26 @@ function confirmBooking() {
   outline-offset: 2px;
 }
 
+.pick,
+.opt {
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.pick:hover,
+.pick:focus-within,
+.opt:hover,
+.opt:focus-within {
+  transform: scale(1.015);
+  box-shadow: var(--cc-shadow-cta);
+}
+
+.pick:not(.pick--on):hover,
+.pick:not(.pick--on):focus-within,
+.opt:not(.opt--on):hover,
+.opt:not(.opt--on):focus-within {
+  border-color: var(--cc-secondary);
+}
+
 /* Sections 3 + 4 — form fields ------------------------------- */
 .field {
   display: flex;
@@ -572,6 +596,20 @@ function confirmBooking() {
   .grid-2,
   .grid-3 {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pick,
+  .opt {
+    transition: none;
+  }
+
+  .pick:hover,
+  .pick:focus-within,
+  .opt:hover,
+  .opt:focus-within {
+    transform: none;
   }
 }
 </style>
