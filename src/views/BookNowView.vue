@@ -95,8 +95,11 @@ const invalid = (key) => (showErrors.value && missing.value[key] ? 'true' : null
 function confirmBooking() {
   attempted.value = true
   if (hasErrors.value) {
-    // "Confirm Booking" is at the bottom, so bring the first problem into view.
-    nextTick(() => document.querySelector('.book__error')?.scrollIntoView({ block: 'center' }))
+    // Bring the first problem into view, then move focus to its control.
+    nextTick(() => {
+      document.querySelector('.book__error')?.scrollIntoView({ block: 'center' })
+      document.querySelector('.book__form [aria-invalid="true"]')?.focus()
+    })
     return
   }
   // Frontend prototype: no request is sent, nothing is stored.
@@ -131,6 +134,7 @@ function confirmBooking() {
                 v-model="selectedServices[service.key]"
                 type="checkbox"
                 class="pick__box"
+                :aria-invalid="invalid('services')"
               />
             </label>
           </div>
@@ -153,6 +157,7 @@ function confirmBooking() {
                 name="logistics"
                 class="opt__input"
                 :value="option.key"
+                :aria-invalid="invalid('logistics')"
               />
               <AppIcon :name="option.icon" :size="24" />
               <span class="opt__label">{{ option.label }}</span>
@@ -249,6 +254,7 @@ function confirmBooking() {
                 name="payment"
                 class="opt__input"
                 :value="option.key"
+                :aria-invalid="invalid('payment')"
               />
               <AppIcon :name="option.icon" :size="26" />
               <span class="opt__label">{{ option.label }}</span>
