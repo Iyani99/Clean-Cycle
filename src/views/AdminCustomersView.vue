@@ -106,6 +106,15 @@ const filteredCustomers = computed(() => {
     <section class="table-card" aria-label="Customers table">
       <div class="table-card__scroll">
         <table class="customers-table">
+          <colgroup>
+            <col style="width: 12%" />
+            <col style="width: 20%" />
+            <col style="width: 14%" />
+            <col style="width: 21%" />
+            <col style="width: 10%" />
+            <col style="width: 12%" />
+            <col style="width: 11%" />
+          </colgroup>
           <thead>
             <tr>
               <th>CUSTOMER ID</th>
@@ -138,6 +147,21 @@ const filteredCustomers = computed(() => {
                 </span>
               </td>
               <td></td>
+            </tr>
+            <tr v-if="filteredCustomers.length === 0">
+              <td colspan="7" class="customers-table__empty">
+                <div class="customers-table__empty-content">
+                  <span class="customers-table__empty-icon">
+                    <AppIcon name="users" :size="20" />
+                  </span>
+                  <span class="customers-table__empty-title">
+                    {{ statusFilter === 'Inactive' ? 'No inactive customers found.' : 'No customers found.' }}
+                  </span>
+                  <span class="customers-table__empty-helper">
+                    {{ statusFilter === 'Inactive' ? 'There are currently no inactive customers.' : 'Try a different search or status filter.' }}
+                  </span>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -318,6 +342,8 @@ const filteredCustomers = computed(() => {
 
 .customers-table {
   width: 100%;
+  min-width: 1020px;
+  table-layout: fixed;
   border-collapse: collapse;
   white-space: nowrap;
 }
@@ -339,6 +365,42 @@ const filteredCustomers = computed(() => {
   color: var(--cc-text);
   padding: 16px 24px;
   border-bottom: 1px solid var(--cc-border);
+}
+
+.customers-table__empty {
+  height: 240px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.customers-table__empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  white-space: normal;
+}
+
+.customers-table__empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 8px;
+  border-radius: 999px;
+  background-color: #e7f0fa;
+  color: var(--cc-secondary);
+}
+
+.customers-table__empty-title {
+  color: var(--cc-heading);
+  font-weight: 600;
+}
+
+.customers-table__empty-helper {
+  color: var(--cc-text);
+  font-size: 0.8125rem;
 }
 
 .customer-address {
