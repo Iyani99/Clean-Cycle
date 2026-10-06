@@ -118,7 +118,7 @@ function peso(amount) {
     <section class="controls-card" aria-label="Search and filter payments">
       <label class="search-box">
         <AppIcon name="search" :size="16" />
-        <input v-model="searchQuery" type="text" placeholder="Search ID or Customer..." />
+        <input v-model="searchQuery" type="text" aria-label="Search payments" placeholder="Search ID or Customer..." />
       </label>
 
       <div class="controls-card__right">
@@ -374,6 +374,11 @@ function peso(amount) {
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius-sm);
   color: var(--cc-text);
+}
+
+.search-box:focus-within {
+  border-color: var(--cc-primary);
+  box-shadow: 0 0 0 3px rgba(0, 60, 144, 0.12);
 }
 
 .search-box input {

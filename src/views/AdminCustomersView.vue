@@ -74,7 +74,7 @@ const filteredCustomers = computed(() => {
     <section class="controls-card" aria-label="Search and filter customers">
       <label class="search-box">
         <AppIcon name="search" :size="16" />
-        <input v-model="searchQuery" type="text" placeholder="Search customers..." />
+        <input v-model="searchQuery" type="text" aria-label="Search customers" placeholder="Search customers..." />
       </label>
 
       <label class="select-box">
@@ -255,6 +255,12 @@ const filteredCustomers = computed(() => {
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius-sm);
   color: var(--cc-text);
+}
+
+.search-box:focus-within,
+.select-box:focus-within {
+  border-color: var(--cc-primary);
+  box-shadow: 0 0 0 3px rgba(0, 60, 144, 0.12);
 }
 
 .search-box input {
