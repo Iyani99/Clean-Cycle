@@ -53,12 +53,14 @@ const notifications = ref([
 const visibleCount = ref(1)
 const visibleNotifications = computed(() => notifications.value.slice(0, visibleCount.value))
 const hasMore = computed(() => visibleCount.value < notifications.value.length)
+const hasUnreadNotifications = computed(() => notifications.value.some((notification) => !notification.read))
 
 function loadMore() {
   visibleCount.value = notifications.value.length
 }
 
 function markAllRead() {
+  if (!hasUnreadNotifications.value) return
   notifications.value.forEach((notification) => {
     notification.read = true
   })
@@ -76,8 +78,13 @@ function toggleDetail(notification) {
     <div class="notifications__content container">
       <header class="notifications__header">
         <h1 class="notifications__title">Notifications</h1>
-        <button type="button" class="notifications__mark-all" @click="markAllRead">
-          Mark all as read
+        <button
+          type="button"
+          class="notifications__mark-all"
+          :aria-disabled="!hasUnreadNotifications"
+          @click="markAllRead"
+        >
+          <span aria-live="polite">{{ hasUnreadNotifications ? 'Mark all as read' : 'All read' }}</span>
         </button>
       </header>
 
@@ -163,10 +170,16 @@ function toggleDetail(notification) {
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
+  transition: color 160ms ease;
 }
 
-.notifications__mark-all:hover {
+.notifications__mark-all:hover:not([aria-disabled='true']) {
   text-decoration: underline;
+}
+
+.notifications__mark-all[aria-disabled='true'] {
+  color: var(--cc-text);
+  cursor: default;
 }
 
 /* Notification card ---------------------------------------------------- */
@@ -196,6 +209,7 @@ function toggleDetail(notification) {
   border-radius: 999px;
   background-color: var(--cc-primary);
   color: var(--cc-text-on-dark);
+  transition: background-color 160ms ease;
 }
 
 /* Read notifications fade to a muted treatment; unread stays as approved
@@ -216,6 +230,7 @@ function toggleDetail(notification) {
   font-size: 0.9375rem;
   font-weight: 700;
   color: var(--cc-heading);
+  transition: color 160ms ease;
 }
 
 .notif-card--read .notif-card__title {
@@ -271,6 +286,14 @@ function toggleDetail(notification) {
 
 .load-more-btn:hover {
   background-color: var(--cc-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notifications__mark-all,
+  .notif-card__icon,
+  .notif-card__title {
+    transition: none;
+  }
 }
 
 /* Footer ----------------------------------------------------------------- */

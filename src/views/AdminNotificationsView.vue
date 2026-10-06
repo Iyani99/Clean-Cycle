@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import AdminLayout from '../components/AdminLayout.vue'
 import AppIcon from '../components/AppIcon.vue'
 
@@ -42,8 +42,10 @@ const notifications = ref([
 ])
 
 const emptyCards = 2
+const hasUnreadNotifications = computed(() => notifications.value.some((notification) => !notification.read))
 
 function markAllRead() {
+  if (!hasUnreadNotifications.value) return
   notifications.value.forEach((notification) => {
     notification.read = true
   })
@@ -62,7 +64,14 @@ function dismiss(id) {
           <h1 class="notifications-header__title">Notifications</h1>
           <p class="notifications-header__subtitle">Manage your recent alerts and updates.</p>
         </div>
-        <button type="button" class="mark-all-btn" @click="markAllRead">Mark all as read</button>
+        <button
+          type="button"
+          class="mark-all-btn"
+          :aria-disabled="!hasUnreadNotifications"
+          @click="markAllRead"
+        >
+          <span aria-live="polite">{{ hasUnreadNotifications ? 'Mark all as read' : 'All read' }}</span>
+        </button>
       </header>
 
       <section class="notifications-list" aria-label="Notifications">
@@ -87,10 +96,11 @@ function dismiss(id) {
           <div class="notif-card__meta">
             <span class="notif-card__dot-slot">
               <span
-                v-if="!notification.read"
                 class="notif-card__dot"
-                role="img"
-                aria-label="Unread"
+                :class="{ 'notif-card__dot--read': notification.read }"
+                :role="notification.read ? null : 'img'"
+                :aria-label="notification.read ? null : 'Unread'"
+                :aria-hidden="notification.read"
               ></span>
             </span>
             <span class="notif-card__time">{{ notification.time }}</span>
@@ -143,10 +153,17 @@ function dismiss(id) {
   font-weight: 500;
   letter-spacing: 0.3px;
   cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease;
 }
 
-.mark-all-btn:hover {
+.mark-all-btn:hover:not([aria-disabled='true']) {
   background-color: #002d6d;
+}
+
+.mark-all-btn[aria-disabled='true'] {
+  background-color: var(--cc-border);
+  color: var(--cc-text);
+  cursor: default;
 }
 
 /* Notification cards ------------------------------------------------- */
@@ -271,6 +288,11 @@ function dismiss(id) {
   height: 10px;
   border-radius: 999px;
   background-color: var(--cc-primary);
+  transition: opacity 160ms ease;
+}
+
+.notif-card__dot--read {
+  opacity: 0;
 }
 
 .notif-card__time {
@@ -278,6 +300,13 @@ function dismiss(id) {
   font-weight: 600;
   color: var(--cc-heading);
   white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark-all-btn,
+  .notif-card__dot {
+    transition: none;
+  }
 }
 
 /* Responsive --------------------------------------------------------- */

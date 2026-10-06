@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { RouterLink } from 'vue-router'
 import CustomerNavbar from '../components/CustomerNavbar.vue'
 import AppIcon from '../components/AppIcon.vue'
@@ -46,8 +46,10 @@ const updates = reactive([
     unread: true,
   },
 ])
+const hasUnreadUpdates = computed(() => updates.some((update) => update.unread))
 
 function markAllRead() {
+  if (!hasUnreadUpdates.value) return
   updates.forEach((update) => {
     update.unread = false
   })
@@ -162,7 +164,14 @@ function markAllRead() {
           </li>
         </ul>
 
-        <button type="button" class="updates__mark" @click="markAllRead">Mark All As Read</button>
+        <button
+          type="button"
+          class="updates__mark"
+          :aria-disabled="!hasUnreadUpdates"
+          @click="markAllRead"
+        >
+          <span aria-live="polite">{{ hasUnreadUpdates ? 'Mark All As Read' : 'All read' }}</span>
+        </button>
       </aside>
     </div>
   </main>
@@ -528,6 +537,7 @@ function markAllRead() {
   gap: 10px;
   padding: 12px 14px;
   border-radius: var(--cc-radius-sm);
+  transition: background-color 160ms ease;
 }
 
 .update--unread {
@@ -541,6 +551,7 @@ function markAllRead() {
   margin-top: 6px;
   border-radius: 999px;
   background-color: var(--cc-border-strong);
+  transition: background-color 160ms ease;
 }
 
 .update--unread .update__dot {
@@ -574,10 +585,24 @@ function markAllRead() {
   background: none;
   border: none;
   cursor: pointer;
+  transition: color 160ms ease;
 }
 
-.updates__mark:hover {
+.updates__mark:hover:not([aria-disabled='true']) {
   text-decoration: underline;
+}
+
+.updates__mark[aria-disabled='true'] {
+  color: var(--cc-text);
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .update,
+  .update__dot,
+  .updates__mark {
+    transition: none;
+  }
 }
 
 /* Responsive ----------------------------------------- */
