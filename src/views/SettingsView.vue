@@ -37,6 +37,7 @@ function onFileChange(event) {
   // Local-only: we read the chosen file's name for feedback. Nothing is
   // uploaded or stored anywhere.
   uploadedFileName.value = event.target.files?.[0]?.name ?? ''
+  profileSaved.value = false
 }
 
 const notifications = reactive({
@@ -80,7 +81,7 @@ const language = ref('en-US')
             </div>
           </div>
 
-          <form class="profile__form" @submit.prevent="saveProfile">
+          <form class="profile__form" @input="profileSaved = false" @submit.prevent="saveProfile">
             <div class="grid-2">
               <label class="field">
                 <span class="field__label">Full Name</span>

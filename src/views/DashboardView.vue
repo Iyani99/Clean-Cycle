@@ -221,6 +221,18 @@ function markAllRead() {
   background-image: linear-gradient(135deg, #003c90 0%, #1e5fa8 100%);
   color: var(--cc-text-on-dark);
   box-shadow: var(--cc-shadow-card);
+  cursor: pointer;
+  transition: box-shadow 160ms ease;
+}
+
+.pickup:hover,
+.pickup:focus-visible {
+  box-shadow: 0 8px 24px rgba(0, 60, 144, 0.2);
+}
+
+.pickup:focus-visible {
+  outline: 2px solid var(--cc-tertiary);
+  outline-offset: 3px;
 }
 
 .pickup__plus {
@@ -232,6 +244,12 @@ function markAllRead() {
   border-radius: 999px;
   background-color: rgba(255, 255, 255, 0.18);
   margin-bottom: 10px;
+  transition: background-color 160ms ease;
+}
+
+.pickup:hover .pickup__plus,
+.pickup:focus-visible .pickup__plus {
+  background-color: rgba(255, 255, 255, 0.28);
 }
 
 .pickup__title {
@@ -598,6 +616,8 @@ function markAllRead() {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .pickup,
+  .pickup__plus,
   .update,
   .update__dot,
   .updates__mark {

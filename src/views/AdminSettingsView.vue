@@ -43,12 +43,17 @@ function onFileChange(event) {
 function removePhoto() {
   uploadedFileName.value = ''
   if (fileInput.value) fileInput.value.value = ''
+  clearSavedFeedback()
 }
 
 // "Save Changes" shows a short local confirmation next to the button, then
 // clears it, so the default frame is unchanged. Nothing is sent or stored.
 const saved = ref(false)
 let savedTimer
+function clearSavedFeedback() {
+  saved.value = false
+  clearTimeout(savedTimer)
+}
 function saveChanges() {
   saved.value = true
   clearTimeout(savedTimer)
@@ -69,7 +74,12 @@ onBeforeUnmount(() => clearTimeout(savedTimer))
     </header>
 
     <div class="settings-grid">
-      <form class="settings-main" @submit.prevent="saveChanges">
+      <form
+        class="settings-main"
+        @input="clearSavedFeedback"
+        @change="clearSavedFeedback"
+        @submit.prevent="saveChanges"
+      >
         <section class="card" aria-labelledby="personal-title">
           <h2 id="personal-title" class="card__title">Personal Information</h2>
 
