@@ -46,7 +46,7 @@ function onSubmit() {
 </script>
 
 <template>
-  <AuthLayout>
+  <AuthLayout class="login-page">
     <h1 class="visually-hidden">{{ role === 'admin' ? 'Admin Login' : 'Customer Login' }}</h1>
     <!--
       Customer / Admin selector. This shared Login screen covers both the
@@ -109,14 +109,33 @@ function onSubmit() {
     </form>
 
     <!-- Signup is public for Customers only; Admin accounts are not self-registered. -->
-    <p v-if="role === 'customer'" class="login-footer">
-      Don't have an account?
-      <RouterLink to="/signup" class="login-footer__link">Sign Up</RouterLink>
-    </p>
+    <Transition name="login-footer">
+      <div v-if="role === 'customer'" class="login-footer-wrap">
+        <p class="login-footer">
+          Don't have an account?
+          <RouterLink to="/signup" class="login-footer__link">Sign Up</RouterLink>
+        </p>
+      </div>
+    </Transition>
   </AuthLayout>
 </template>
 
 <style scoped>
+.login-page :deep(.auth-page__glow) {
+  background-image: radial-gradient(
+    circle,
+    rgba(49, 153, 193, 0.2) 0%,
+    rgba(43, 120, 179, 0.11) 45%,
+    transparent 72%
+  );
+  filter: blur(24px);
+  opacity: 1;
+}
+
+.login-page :deep(.auth-card) {
+  box-shadow: 0 18px 48px rgba(0, 60, 144, 0.1), var(--cc-shadow-card);
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -132,33 +151,44 @@ function onSubmit() {
   display: flex;
   height: 40px;
   margin-bottom: 32px;
-  background-color: var(--cc-primary);
+  overflow: hidden;
+  background-color: var(--cc-surface);
   border: 1px solid #5e5e5e;
   border-radius: var(--cc-radius-sm);
 }
 
-/* Both segments share one look: a white pill when idle, filled blue when it is
-   the selected role, so the blue block always sits on the active side. */
+.auth-toggle:focus-within {
+  outline: 2px solid var(--cc-secondary);
+  outline-offset: 2px;
+}
+
+/* A single outer border and center divider keep the two roles one control. */
 .auth-toggle__option {
-  position: relative;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: -1px;
   font-family: var(--cc-font-sans);
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1;
   color: #000000;
   background-color: var(--cc-surface);
-  border: 1px solid #5e5e5e;
-  border-radius: 10px;
+  border: 0;
   cursor: pointer;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.auth-toggle__option + .auth-toggle__option {
+  border-left: 1px solid #5e5e5e;
+}
+
+.auth-toggle__option:not(.auth-toggle__option--active):hover {
+  background-color: var(--cc-bg);
+  color: var(--cc-primary);
 }
 
 .auth-toggle__option--active {
-  z-index: 1;
   color: var(--cc-text-on-dark);
   font-weight: 600;
   background-color: var(--cc-primary);
@@ -195,7 +225,25 @@ function onSubmit() {
 }
 
 /* Footer ---------------------------------------------------------- */
+.login-footer-wrap {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.login-footer-enter-active,
+.login-footer-leave-active {
+  transition: grid-template-rows 180ms ease, opacity 180ms ease;
+}
+
+.login-footer-enter-from,
+.login-footer-leave-to {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
 .login-footer {
+  min-height: 0;
+  overflow: hidden;
   text-align: center;
   font-size: 0.875rem;
   line-height: 20px;
@@ -212,5 +260,13 @@ function onSubmit() {
 
 .login-footer__link:hover {
   text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-toggle__option,
+  .login-footer-enter-active,
+  .login-footer-leave-active {
+    transition: none;
+  }
 }
 </style>

@@ -565,10 +565,12 @@ onBeforeUnmount(() => clearTimeout(createdTimer))
   color: var(--cc-heading);
   text-align: center;
   cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 .service-opt:hover {
   background-color: var(--cc-bg);
+  border-color: var(--cc-secondary);
 }
 
 .service-opt:focus-within {
@@ -693,6 +695,18 @@ onBeforeUnmount(() => clearTimeout(createdTimer))
   background-color: var(--cc-surface);
   color: var(--cc-text);
   cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.transport-opt:hover,
+.transport-opt:focus-within {
+  background-color: var(--cc-bg);
+  border-color: var(--cc-secondary);
+}
+
+.transport-opt:focus-within {
+  outline: 2px solid var(--cc-secondary);
+  outline-offset: 1px;
 }
 
 .transport-opt input {
@@ -703,9 +717,18 @@ onBeforeUnmount(() => clearTimeout(createdTimer))
   accent-color: var(--cc-primary);
 }
 
-.transport-opt--on {
+.transport-opt--on,
+.transport-opt--on:hover,
+.transport-opt--on:focus-within {
   border-color: var(--cc-primary);
   background-color: #eef4fb;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-opt,
+  .transport-opt {
+    transition: none;
+  }
 }
 
 .transport-opt__text {

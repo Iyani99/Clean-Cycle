@@ -151,12 +151,15 @@ const navItems = [
   font-size: 0.875rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 160ms ease;
+  outline: 2px solid transparent;
+  transition: background-color 160ms ease, outline-color 160ms ease, transform 160ms ease;
 }
 
 .admin-sidebar__new-booking:hover,
 .admin-sidebar__new-booking:focus-visible {
   background-color: #002d6d;
+  outline-color: var(--cc-secondary);
+  transform: scale(1.02);
 }
 
 .admin-sidebar__nav {
@@ -175,16 +178,20 @@ const navItems = [
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--cc-text);
-  transition: color 160ms ease, background-color 160ms ease;
+  outline: 2px solid transparent;
+  transition: color 160ms ease, background-color 160ms ease, outline-color 160ms ease,
+    transform 160ms ease;
 }
 
 .admin-sidebar__link:hover,
 .admin-sidebar__link:focus-visible {
   background-color: var(--cc-bg);
+  outline-color: var(--cc-secondary);
+  transform: scale(1.02);
 }
 
 .admin-sidebar__link.router-link-active,
-.admin-sidebar__link--current {
+.admin-sidebar__link.admin-sidebar__link--current {
   background-color: #e7f0fa;
   color: var(--cc-primary);
   font-weight: 700;
@@ -201,6 +208,22 @@ const navItems = [
 
 .admin-sidebar__link--disabled:hover {
   background-color: transparent;
+  outline-color: transparent;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-sidebar__new-booking,
+  .admin-sidebar__link {
+    transition: none;
+  }
+
+  .admin-sidebar__new-booking:hover,
+  .admin-sidebar__new-booking:focus-visible,
+  .admin-sidebar__link:hover,
+  .admin-sidebar__link:focus-visible {
+    transform: none;
+  }
 }
 
 .admin-sidebar__profile {
