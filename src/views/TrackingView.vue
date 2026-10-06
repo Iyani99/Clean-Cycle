@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import CustomerNavbar from '../components/CustomerNavbar.vue'
 import AppIcon from '../components/AppIcon.vue'
 
@@ -8,7 +8,7 @@ import AppIcon from '../components/AppIcon.vue'
  *
  * Frontend simulation only. The journey below is static mock data held in the
  * component. There is NO live tracking, no polling, no timer, no backend, no
- * GPS or map. The current stage simply stays at "IN PROGRESS".
+ * GPS or map. The initial stage is "IN PROGRESS"; cancellation is local only.
  */
 const orderNo = 'CC-8942-LN'
 
@@ -32,6 +32,21 @@ const serviceDetails = [
 ]
 
 const supportRequested = ref(false)
+const cancelled = ref(false)
+
+const displayedSteps = computed(() => {
+  if (!cancelled.value) return trackingSteps
+
+  return trackingSteps.map((step) => {
+    if (step.key === 'ready') {
+      return { ...step, label: 'CANCELLED', state: 'cancelled', meta: '' }
+    }
+    if (step.key === 'in-progress') {
+      return { ...step, meta: 'Last reached stage' }
+    }
+    return step
+  })
+})
 
 function contactSupport() {
   supportRequested.value = true
@@ -57,20 +72,25 @@ function contactSupport() {
         <section class="card" aria-label="Status journey">
           <h2 class="card__title">Status Journey</h2>
 
+          <p class="journey-status" role="status">
+            {{ cancelled ? 'Booking Cancelled' : '' }}
+          </p>
+
           <ol class="journey">
             <li
-              v-for="step in trackingSteps"
+              v-for="step in displayedSteps"
               :key="step.key"
               class="stage"
               :class="`stage--${step.state}`"
             >
               <span class="stage__marker">
                 <AppIcon v-if="step.state === 'done'" name="check" :size="14" />
+                <AppIcon v-else-if="step.state === 'cancelled'" name="x-circle" :size="28" />
                 <span v-else class="stage__dot"></span>
               </span>
               <span class="stage__body">
                 <span class="stage__label">{{ step.label }}</span>
-                <span class="stage__meta">{{ step.meta }}</span>
+                <span v-if="step.meta" class="stage__meta">{{ step.meta }}</span>
               </span>
             </li>
           </ol>
@@ -93,6 +113,21 @@ function contactSupport() {
 
           <p v-if="supportRequested" class="sd-note" role="status">
             Support will contact you shortly.
+          </p>
+
+          <button
+            type="button"
+            class="sd-cancel"
+            :disabled="cancelled"
+            aria-describedby="cancel-booking-help"
+            @click="cancelled = true"
+          >
+            {{ cancelled ? 'Booking Cancelled' : 'Cancel Booking' }}
+          </button>
+          <p id="cancel-booking-help" class="sd-cancel-help">
+            {{ cancelled
+              ? 'Service details remain visible for reference.'
+              : 'Cancel this booking if you no longer need the service.' }}
           </p>
         </section>
       </div>
@@ -173,6 +208,16 @@ function contactSupport() {
 }
 
 /* Status journey ---------------------------------------------- */
+.journey-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .journey {
   display: flex;
   list-style: none;
@@ -273,6 +318,11 @@ function contactSupport() {
   color: #9aa0a8;
 }
 
+.stage--cancelled .stage__marker,
+.stage--cancelled .stage__label {
+  color: var(--cc-error);
+}
+
 .stage__meta {
   font-size: 0.8125rem;
   color: var(--cc-text);
@@ -310,7 +360,8 @@ function contactSupport() {
   text-align: right;
 }
 
-.sd-support {
+.sd-support,
+.sd-cancel {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -329,6 +380,34 @@ function contactSupport() {
 
 .sd-support:hover {
   background-color: var(--cc-bg);
+}
+
+.sd-cancel {
+  margin-top: 12px;
+  border-color: var(--cc-error);
+  color: var(--cc-error);
+}
+
+.sd-cancel:enabled:hover,
+.sd-cancel:disabled {
+  background-color: #fbe4e6;
+}
+
+.sd-cancel:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.sd-cancel:focus-visible {
+  outline: 2px solid var(--cc-error);
+  outline-offset: 2px;
+}
+
+.sd-cancel-help {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--cc-text);
 }
 
 .sd-note {
