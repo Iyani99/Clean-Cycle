@@ -175,6 +175,19 @@ function peso(amount) {
                 </button>
               </td>
             </tr>
+            <tr v-if="filteredPayments.length === 0">
+              <td colspan="7" class="payments-table__empty">
+                <div class="payments-table__empty-content">
+                  <span class="payments-table__empty-icon" aria-hidden="true">
+                    <AppIcon name="card" :size="20" />
+                  </span>
+                  <span class="payments-table__empty-title">No payments found.</span>
+                  <span class="payments-table__empty-helper">
+                    {{ searchQuery.trim() ? 'Try a different search or status filter.' : statusFilter === 'All Statuses' ? 'There are currently no payments.' : `There are currently no payments marked ${statusFilter.toLowerCase()}.` }}
+                  </span>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -474,6 +487,42 @@ function peso(amount) {
   color: var(--cc-text);
   padding: 16px 24px;
   border-bottom: 1px solid var(--cc-border);
+}
+
+.payments-table__empty {
+  height: 240px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.payments-table__empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  white-space: normal;
+}
+
+.payments-table__empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 8px;
+  border-radius: 999px;
+  background-color: #e7f0fa;
+  color: var(--cc-secondary);
+}
+
+.payments-table__empty-title {
+  color: var(--cc-heading);
+  font-weight: 600;
+}
+
+.payments-table__empty-helper {
+  color: var(--cc-text);
+  font-size: 0.8125rem;
 }
 
 .payment-id {

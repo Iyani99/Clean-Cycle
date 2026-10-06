@@ -122,6 +122,19 @@ function confirmBooking(booking) {
                 </span>
               </td>
             </tr>
+            <tr v-if="filteredBookings.length === 0">
+              <td colspan="6" class="bookings-table__empty">
+                <div class="bookings-table__empty-content">
+                  <span class="bookings-table__empty-icon" aria-hidden="true">
+                    <AppIcon name="inbox" :size="20" />
+                  </span>
+                  <span class="bookings-table__empty-title">No bookings found.</span>
+                  <span class="bookings-table__empty-helper">
+                    {{ searchQuery.trim() ? 'Try a different search or status filter.' : activeFilter === 'All' ? 'There are currently no bookings.' : `There are currently no ${activeFilter.toLowerCase()} bookings.` }}
+                  </span>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -298,6 +311,42 @@ function confirmBooking(booking) {
   color: var(--cc-text);
   padding: 16px 24px;
   border-bottom: 1px solid var(--cc-border);
+}
+
+.bookings-table__empty {
+  height: 240px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.bookings-table__empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  white-space: normal;
+}
+
+.bookings-table__empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 8px;
+  border-radius: 999px;
+  background-color: #e7f0fa;
+  color: var(--cc-secondary);
+}
+
+.bookings-table__empty-title {
+  color: var(--cc-heading);
+  font-weight: 600;
+}
+
+.bookings-table__empty-helper {
+  color: var(--cc-text);
+  font-size: 0.8125rem;
 }
 
 .booking-id {
