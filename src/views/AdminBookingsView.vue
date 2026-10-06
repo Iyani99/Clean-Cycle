@@ -109,15 +109,17 @@ function confirmBooking(booking) {
               </td>
               <td>{{ booking.rider }}</td>
               <td class="actions-cell">
-                <button
-                  v-if="booking.status === 'Pending'"
-                  type="button"
-                  class="action-link action-link--confirm"
-                  @click="confirmBooking(booking)"
-                >
-                  Confirm
-                </button>
-                <button type="button" class="action-link action-link--view">View</button>
+                <span class="actions-cell__controls">
+                  <button
+                    v-if="booking.status === 'Pending'"
+                    type="button"
+                    class="action-link action-link--confirm"
+                    @click="confirmBooking(booking)"
+                  >
+                    Confirm
+                  </button>
+                  <button type="button" class="action-link action-link--view">View</button>
+                </span>
               </td>
             </tr>
           </tbody>
@@ -313,8 +315,8 @@ function confirmBooking(booking) {
   color: #157347;
 }
 
-.actions-cell {
-  display: flex;
+.actions-cell__controls {
+  display: inline-flex;
   align-items: center;
   gap: 16px;
 }
