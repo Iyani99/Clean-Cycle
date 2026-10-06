@@ -41,7 +41,7 @@ function confirmBooking() {
 
 <template>
   <main class="payment">
-    <section class="summary" aria-labelledby="summary-title">
+    <section class="summary cc-customer-card" aria-labelledby="summary-title">
       <h1 id="summary-title" class="summary__title">Order Summary</h1>
       <hr class="summary__rule" />
 
@@ -167,6 +167,7 @@ function confirmBooking() {
   letter-spacing: 0.8px;
   text-transform: uppercase;
   cursor: pointer;
+  transition: background-color 160ms ease;
 }
 
 .summary__confirm:enabled:hover {
@@ -200,17 +201,32 @@ function confirmBooking() {
   width: max-content;
   margin: 14px auto 0;
   padding: 8px 22px;
+  border: 1px solid var(--cc-primary);
   border-radius: var(--cc-radius-sm);
-  background-color: var(--cc-primary);
-  color: var(--cc-text-on-dark);
+  background-color: var(--cc-surface);
+  color: var(--cc-primary);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
+  transition: background-color 160ms ease;
 }
 
 .summary__back:hover {
-  background-color: #002d6d;
+  background-color: #e7f0fa;
+}
+
+.summary__confirm:focus-visible,
+.summary__back:focus-visible {
+  outline: 2px solid var(--cc-tertiary);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .summary__confirm,
+  .summary__back {
+    transition: none;
+  }
 }
 
 @media (max-width: 620px) {

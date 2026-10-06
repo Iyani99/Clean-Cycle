@@ -12,17 +12,15 @@ const router = createRouter({
     {
       path: '/services',
       name: 'services',
-      // Services - Customer: authenticated customer screen with its own
-      // CustomerNavbar, so the public navbar is hidden here.
-      meta: { hideNavbar: true },
+      // Services - Customer: uses the shared authenticated customer header.
+      meta: { hideNavbar: true, customerNav: true },
       component: () => import('../views/ServicesView.vue'),
     },
     {
       path: '/book',
       name: 'book',
-      // Book now - Customer: authenticated customer screen with its own
-      // CustomerNavbar, so the public navbar is hidden here.
-      meta: { hideNavbar: true },
+      // Book now - Customer: uses the shared authenticated customer header.
+      meta: { hideNavbar: true, customerNav: true },
       component: () => import('../views/BookNowView.vue'),
     },
     {
@@ -36,9 +34,8 @@ const router = createRouter({
     {
       path: '/tracking',
       name: 'tracking',
-      // Service Tracking - Customer: authenticated screen with its own
-      // CustomerNavbar, so the public navbar is hidden here.
-      meta: { hideNavbar: true },
+      // Service Tracking - Customer: uses the shared authenticated customer header.
+      meta: { hideNavbar: true, customerNav: true },
       component: () => import('../views/TrackingView.vue'),
     },
     {
@@ -58,25 +55,22 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'dashboard',
-      // The Customer Dashboard renders its own authenticated header (CustomerNavbar),
-      // so the public navbar is hidden here.
-      meta: { hideNavbar: true },
+      // The Customer Dashboard uses the shared authenticated customer header.
+      meta: { hideNavbar: true, customerNav: true },
       component: () => import('../views/DashboardView.vue'),
     },
     {
       path: '/settings',
       name: 'settings',
-      // Settings/Profile - Customer: authenticated customer screen with its own
-      // CustomerNavbar, so the public navbar is hidden here.
-      meta: { hideNavbar: true },
+      // Settings/Profile - Customer: uses the shared authenticated customer header.
+      meta: { hideNavbar: true, customerNav: true },
       component: () => import('../views/SettingsView.vue'),
     },
     {
       path: '/notifications',
       name: 'notifications',
-      // Notification - Customer: authenticated customer screen with its own
-      // CustomerNavbar, so the public navbar is hidden here.
-      meta: { hideNavbar: true },
+      // Notification - Customer: uses the shared authenticated customer header.
+      meta: { hideNavbar: true, customerNav: true },
       component: () => import('../views/NotificationsView.vue'),
     },
     {

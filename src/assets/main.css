@@ -27,3 +27,31 @@ h3 {
   color: var(--cc-heading);
   line-height: 1.2;
 }
+
+/* Customer-only major surfaces. Static cards keep static depth. */
+.cc-customer-card {
+  box-shadow: var(--cc-shadow-customer-card);
+}
+
+/* Reused by status-filtered Admin tables. Only newly selected result bodies animate. */
+.cc-filter-results-enter {
+  animation: cc-filter-results-enter 180ms ease both;
+}
+
+@keyframes cc-filter-results-enter {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-filter-results-enter {
+    animation: none;
+  }
+}

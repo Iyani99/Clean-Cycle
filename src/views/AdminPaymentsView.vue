@@ -11,33 +11,74 @@ import AppIcon from '../components/AppIcon.vue'
  * service, and no persistence. "Mark as Paid" only flips a local `status`
  * field; nothing survives a refresh.
  *
- * Note: the screenshot's "TOTAL PENDING" summary card shows ₱0.00 while the
- * one mock payment row below it is Pending ₱80.00 — a pre-existing Figma/
- * mock-data inconsistency, reproduced as-is rather than silently corrected.
- * The summary cards intentionally stay static after "Mark as Paid" — they
- * are fixed screenshot values, not a live computation over the table.
+ * Summary cards reflect this local sample so they stay consistent when a row
+ * is marked Paid. This is display-only prototype state, not a real payment.
  */
-const summary = {
-  totalPaidMonth: '0.00',
-  paidChangeNote: '+12.5% from last month',
-  totalPending: '0.00',
-  pendingBookingsNote: 'Across 24 active bookings',
-  notifyCount: 24,
-}
-
 const searchQuery = ref('')
 const statusFilter = ref('All Statuses')
+const hasSwitchedStatus = ref(false)
 
 const payments = reactive([
   {
     id: '#CC-001',
     name: 'Jerson Tomas',
-    amount: 80.0,
+    amount: 85.0,
     method: 'COD',
     status: 'Pending',
     date: 'Aug 21, 2026',
   },
+  {
+    id: '#CC-002',
+    name: 'Maria Santos',
+    amount: 335.0,
+    method: 'Online Payment',
+    status: 'Paid',
+    date: 'Aug 20, 2026',
+  },
+  {
+    id: '#CC-003',
+    name: 'Ana Dela Cruz',
+    amount: 220.0,
+    method: 'Online Payment',
+    status: 'Paid',
+    date: 'Aug 19, 2026',
+  },
+  {
+    id: '#CC-004',
+    name: 'Paolo Reyes',
+    amount: 250.0,
+    method: 'COD',
+    status: 'Pending',
+    date: 'Aug 18, 2026',
+  },
+  {
+    id: '#CC-005',
+    name: 'Liza Garcia',
+    amount: 360.0,
+    method: 'COD',
+    status: 'Pending',
+    date: 'Aug 17, 2026',
+  },
+  {
+    id: '#CC-006',
+    name: 'Carlo Mendoza',
+    amount: 420.0,
+    method: 'COD',
+    status: 'Paid',
+    date: 'Aug 16, 2026',
+  },
 ])
+
+const summary = computed(() => {
+  const paid = payments.filter((payment) => payment.status === 'Paid')
+  const pending = payments.filter((payment) => payment.status === 'Pending')
+  return {
+    totalPaid: paid.reduce((total, payment) => total + payment.amount, 0),
+    totalPending: pending.reduce((total, payment) => total + payment.amount, 0),
+    paidCount: paid.length,
+    pendingCount: pending.length,
+  }
+})
 
 const filteredPayments = computed(() => {
   const query = searchQuery.value.trim().toLowerCase()
@@ -67,7 +108,7 @@ function peso(amount) {
       <div>
         <h1 class="payments-header__title">Payment Management</h1>
         <p class="payments-header__subtitle">
-          Overview of recent transactions and outstanding balances.
+          Overview of sample transactions and outstanding balances.
         </p>
       </div>
     </header>
@@ -75,32 +116,34 @@ function peso(amount) {
     <div class="summary-grid">
       <article class="summary-card">
         <div class="summary-card__head">
-          <span class="summary-card__label">TOTAL PAID (MONTH)</span>
+          <span class="summary-card__label">TOTAL PAID (SAMPLE)</span>
           <span class="summary-card__icon summary-card__icon--paid">
             <AppIcon name="check-circle" :size="16" />
           </span>
         </div>
         <div class="summary-card__value">
           <span class="summary-card__peso">₱</span>
-          <span class="summary-card__amount">{{ summary.totalPaidMonth }}</span>
+          <span class="summary-card__amount">{{ summary.totalPaid.toFixed(2) }}</span>
         </div>
-        <p class="summary-card__support summary-card__support--positive">
-          {{ summary.paidChangeNote }}
+        <p class="summary-card__support">
+          {{ summary.paidCount }} paid {{ summary.paidCount === 1 ? 'booking' : 'bookings' }} in sample
         </p>
       </article>
 
       <article class="summary-card">
         <div class="summary-card__head">
-          <span class="summary-card__label">TOTAL PENDING</span>
+          <span class="summary-card__label">TOTAL PENDING (SAMPLE)</span>
           <span class="summary-card__icon summary-card__icon--pending">
             <AppIcon name="history" :size="16" />
           </span>
         </div>
         <div class="summary-card__value">
           <span class="summary-card__peso">₱</span>
-          <span class="summary-card__amount">{{ summary.totalPending }}</span>
+          <span class="summary-card__amount">{{ summary.totalPending.toFixed(2) }}</span>
         </div>
-        <p class="summary-card__support">{{ summary.pendingBookingsNote }}</p>
+        <p class="summary-card__support">
+          {{ summary.pendingCount }} pending {{ summary.pendingCount === 1 ? 'booking' : 'bookings' }} in sample
+        </p>
       </article>
 
       <article class="reminder-card">
@@ -109,8 +152,8 @@ function peso(amount) {
         </span>
         <h2 class="reminder-card__title">Send Reminders</h2>
         <p class="reminder-card__text">Notify customers with pending payments.</p>
-        <button type="button" class="reminder-card__btn">
-          Notify All ({{ summary.notifyCount }})
+        <button type="button" class="reminder-card__btn" :disabled="summary.pendingCount === 0">
+          Notify All ({{ summary.pendingCount }})
         </button>
       </article>
     </div>
@@ -122,7 +165,7 @@ function peso(amount) {
       </label>
 
       <div class="controls-card__right">
-        <select v-model="statusFilter" class="status-select">
+        <select v-model="statusFilter" class="status-select" @change="hasSwitchedStatus = true">
           <option>All Statuses</option>
           <option>Pending</option>
           <option>Paid</option>
@@ -149,7 +192,7 @@ function peso(amount) {
               <th>ACTION</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody :key="statusFilter" :class="{ 'cc-filter-results-enter': hasSwitchedStatus }">
             <tr v-for="payment in filteredPayments" :key="payment.id">
               <td><span class="payment-id">{{ payment.id }}</span></td>
               <td>{{ payment.name }}</td>
@@ -166,12 +209,14 @@ function peso(amount) {
               <td class="payment-date">{{ payment.date }}</td>
               <td>
                 <button
-                  v-if="payment.status === 'Pending'"
                   type="button"
                   class="mark-paid-btn"
+                  :class="{ 'mark-paid-btn--done': payment.status === 'Paid' }"
+                  :disabled="payment.status === 'Paid'"
                   @click="markAsPaid(payment)"
                 >
-                  Mark as Paid
+                  <AppIcon v-if="payment.status === 'Paid'" name="check" :size="14" />
+                  {{ payment.status === 'Paid' ? 'Paid' : 'Mark as Paid' }}
                 </button>
               </td>
             </tr>
@@ -197,15 +242,9 @@ function peso(amount) {
           Showing {{ filteredPayments.length > 0 ? 1 : 0 }} to {{ filteredPayments.length }} of
           {{ filteredPayments.length }} entries
         </span>
-        <!-- Screenshot shows page 2/3 controls despite a single-record dataset
-             — the same Figma/mockup inconsistency already reproduced on
-             Booking Management and Customer Management. All non-"1" controls
-             are inert. -->
         <div class="pagination">
           <button type="button" class="page-btn" disabled aria-label="Previous page">‹</button>
           <button type="button" class="page-btn page-btn--active">1</button>
-          <button type="button" class="page-btn" disabled>2</button>
-          <button type="button" class="page-btn" disabled>3</button>
           <button type="button" class="page-btn" disabled aria-label="Next page">›</button>
         </div>
       </footer>
@@ -307,11 +346,6 @@ function peso(amount) {
   color: var(--cc-text);
 }
 
-.summary-card__support--positive {
-  color: #157347;
-  font-weight: 600;
-}
-
 /* Send Reminders card ----------------------------------------------- */
 .reminder-card {
   display: flex;
@@ -333,17 +367,19 @@ function peso(amount) {
   margin-bottom: 12px;
   border-radius: var(--cc-radius-sm);
   background-color: rgba(255, 255, 255, 0.15);
+  color: var(--cc-text-on-dark);
 }
 
 .reminder-card__title {
   font-size: 1.0625rem;
   font-weight: 700;
   margin-bottom: 6px;
+  color: var(--cc-text-on-dark);
 }
 
 .reminder-card__text {
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 16px;
 }
 
@@ -358,8 +394,13 @@ function peso(amount) {
   cursor: pointer;
 }
 
-.reminder-card__btn:hover {
+.reminder-card__btn:enabled:hover {
   background-color: #eef2f7;
+}
+
+.reminder-card__btn:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 /* Controls card ------------------------------------------------------- */
@@ -456,7 +497,7 @@ function peso(amount) {
 
 .table-card__scroll {
   overflow-x: auto;
-  min-height: 300px;
+  min-height: 460px;
 }
 
 .payments-table {
@@ -556,6 +597,11 @@ function peso(amount) {
 }
 
 .mark-paid-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 110px;
   padding: 6px 14px;
   border: 1px solid var(--cc-primary);
   border-radius: var(--cc-radius-sm);
@@ -565,10 +611,29 @@ function peso(amount) {
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
+  transition: background-color 160ms ease;
 }
 
-.mark-paid-btn:hover {
+.mark-paid-btn:enabled:hover {
   background-color: #e7f0fa;
+}
+
+.mark-paid-btn:focus-visible {
+  outline: 2px solid var(--cc-tertiary);
+  outline-offset: 2px;
+}
+
+.mark-paid-btn--done {
+  border-color: #b7d9c8;
+  background-color: #e0f4ef;
+  color: #157347;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark-paid-btn {
+    transition: none;
+  }
 }
 
 /* Footer / pagination ---------------------------------------------- */

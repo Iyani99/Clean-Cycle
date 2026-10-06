@@ -14,10 +14,8 @@ import AppIcon from '../components/AppIcon.vue'
  * things in the screenshot (an overall count vs. a result count), not because
  * one is "more correct".
  *
- * Note: this screen's screenshot uses booking ID "#CC-001" for the customer,
- * matching Booking Management's mock row rather than the Admin Dashboard's
- * "#BK-0921" — a pre-existing Figma/mock-data inconsistency across the three
- * Admin screens, reproduced as-is rather than silently normalized.
+ * Sample IDs and customer names align with Booking Management and the Admin
+ * Dashboard's Recent Bookings snapshot.
  */
 const customers = [
   {
@@ -29,10 +27,56 @@ const customers = [
     bookings: 1,
     status: 'Active',
   },
+  {
+    id: '#CC-002',
+    name: 'Maria Santos',
+    initials: 'MS',
+    contact: '09170001002',
+    address: 'Poblacion, Baliwag, Bulacan',
+    bookings: 3,
+    status: 'Active',
+  },
+  {
+    id: '#CC-003',
+    name: 'Ana Dela Cruz',
+    initials: 'AD',
+    contact: '09170001003',
+    address: 'Bagong Nayon, Baliwag, Bulacan',
+    bookings: 2,
+    status: 'Active',
+  },
+  {
+    id: '#CC-004',
+    name: 'Paolo Reyes',
+    initials: 'PR',
+    contact: '09170001004',
+    address: 'Tibag, Baliwag, Bulacan',
+    bookings: 1,
+    status: 'Active',
+  },
+  {
+    id: '#CC-005',
+    name: 'Liza Garcia',
+    initials: 'LG',
+    contact: '09170001005',
+    address: 'Concepcion, Baliwag, Bulacan',
+    bookings: 5,
+    status: 'Active',
+  },
+  {
+    id: '#CC-006',
+    name: 'Carlo Mendoza',
+    initials: 'CM',
+    contact: '09170001006',
+    address: 'Sabang, Baliwag, Bulacan',
+    bookings: 2,
+    status: 'Inactive',
+  },
 ]
 
 const searchQuery = ref('')
 const statusFilter = ref('All Statuses')
+const hasSwitchedStatus = ref(false)
 const sortBy = ref('Customer ID')
 
 const filteredCustomers = computed(() => {
@@ -79,7 +123,7 @@ const filteredCustomers = computed(() => {
 
       <label class="select-box">
         <span class="select-box__prefix">Status:</span>
-        <select v-model="statusFilter" class="select-box__control">
+        <select v-model="statusFilter" class="select-box__control" @change="hasSwitchedStatus = true">
           <option>All Statuses</option>
           <option>Active</option>
           <option>Inactive</option>
@@ -126,7 +170,7 @@ const filteredCustomers = computed(() => {
               <th>ACTIONS</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody :key="statusFilter" :class="{ 'cc-filter-results-enter': hasSwitchedStatus }">
             <tr v-for="customer in filteredCustomers" :key="customer.id">
               <td><span class="customer-id">{{ customer.id }}</span></td>
               <td>
@@ -172,16 +216,9 @@ const filteredCustomers = computed(() => {
           Showing {{ filteredCustomers.length > 0 ? 1 : 0 }} to {{ filteredCustomers.length }} of
           {{ filteredCustomers.length }} entries
         </span>
-        <!-- Screenshot shows page 2/3 controls despite a single-record dataset
-             — a Figma/mockup inconsistency, reproduced as-is rather than
-             manufacturing extra customers to justify it. All non-"1" controls
-             are inert. -->
         <div class="pagination">
           <button type="button" class="page-btn page-btn--text" disabled>Previous</button>
           <button type="button" class="page-btn page-btn--active">1</button>
-          <button type="button" class="page-btn" disabled>2</button>
-          <button type="button" class="page-btn" disabled>3</button>
-          <span class="page-ellipsis">...</span>
           <button type="button" class="page-btn page-btn--text" disabled>Next</button>
         </div>
       </footer>
@@ -343,7 +380,7 @@ const filteredCustomers = computed(() => {
 
 .table-card__scroll {
   overflow-x: auto;
-  min-height: 300px;
+  min-height: 450px;
 }
 
 .customers-table {
@@ -359,11 +396,11 @@ const filteredCustomers = computed(() => {
   font-weight: 600;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: var(--cc-text);
+  color: var(--cc-primary);
   text-align: left;
-  background-color: var(--cc-bg);
+  background-color: #e7f0fa;
   padding: 14px 24px;
-  border-bottom: 1px solid var(--cc-border);
+  border-bottom: 1px solid #c8dcef;
 }
 
 .customers-table td {
@@ -480,12 +517,6 @@ const filteredCustomers = computed(() => {
   display: flex;
   align-items: center;
   gap: 6px;
-}
-
-.page-ellipsis {
-  padding: 0 4px;
-  color: var(--cc-text);
-  font-size: 0.8125rem;
 }
 
 .page-btn {

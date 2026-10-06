@@ -1,7 +1,6 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import { RouterLink } from 'vue-router'
-import CustomerNavbar from '../components/CustomerNavbar.vue'
 import AppIcon from '../components/AppIcon.vue'
 
 /**
@@ -16,10 +15,10 @@ const customerName = 'Jerson'
 const stats = [
   { key: 'active', label: 'Active Services', value: 1, icon: 'washer', tone: 'blue' },
   { key: 'ready', label: 'Ready for Pickup', value: 0, icon: 'check-circle', tone: 'teal' },
-  { key: 'completed', label: 'Completed Orders', value: 0, icon: 'history', tone: 'grey' },
+  { key: 'completed', label: 'Completed Orders', value: 2, icon: 'history', tone: 'grey' },
 ]
 
-const currentOrder = '#8892'
+const currentOrder = '#CC-8942-LN'
 const steps = [
   { label: 'Received', icon: 'inbox', state: 'done' },
   { label: 'Washing', icon: 'waves', state: 'done' },
@@ -30,20 +29,40 @@ const steps = [
 
 const recentServices = [
   {
-    id: '#CC-001',
+    id: currentOrder,
     type: 'Wash and Fold',
     date: 'August 21, 2026',
-    amount: '₱0.00',
-    status: 'Washing',
+    amount: '₱85.00',
+    status: 'Drying',
+  },
+  {
+    id: '#CC-0876',
+    type: 'Wash and Fold',
+    date: 'August 14, 2026',
+    amount: '₱170.00',
+    status: 'Completed',
+  },
+  {
+    id: '#CC-0831',
+    type: 'Dry Cleaning',
+    date: 'August 7, 2026',
+    amount: '₱140.00',
+    status: 'Completed',
   },
 ]
 
 const updates = reactive([
   {
     id: 1,
-    text: 'Your order #CC-001 has moved to the Drying phase.',
+    text: `Your order ${currentOrder} has moved to the Drying phase.`,
     time: '10 mins ago',
     unread: true,
+  },
+  {
+    id: 2,
+    text: 'Your order #CC-0876 was completed.',
+    time: 'Aug 14',
+    unread: false,
   },
 ])
 const hasUnreadUpdates = computed(() => updates.some((update) => update.unread))
@@ -57,122 +76,124 @@ function markAllRead() {
 </script>
 
 <template>
-  <CustomerNavbar />
-
   <main class="dashboard">
     <div class="dashboard__grid container">
-      <header class="welcome">
-        <h1 class="welcome__title">Welcome back, {{ customerName }}!</h1>
-        <p class="welcome__text">Here is a quick overview of your laundry services today.</p>
-      </header>
-
-      <RouterLink to="/book" class="pickup">
-        <span class="pickup__plus"><AppIcon name="plus" :size="18" /></span>
-        <h2 class="pickup__title">Schedule a Pickup</h2>
-        <p class="pickup__text">
-          Need fresh clothes? Book your next laundry service in just a few taps.
-        </p>
-        <span class="pickup__cta">
-          Book Now
-          <AppIcon name="arrow-right" :size="18" />
-        </span>
-      </RouterLink>
-
-      <section class="overview" aria-label="Service overview">
-        <div class="stats">
-          <article v-for="stat in stats" :key="stat.key" class="stat">
-            <span class="stat__icon" :class="`stat__icon--${stat.tone}`">
-              <AppIcon :name="stat.icon" :size="20" />
-            </span>
-            <span class="stat__body">
-              <span class="stat__label">{{ stat.label }}</span>
-              <span class="stat__value">{{ stat.value }}</span>
-            </span>
-          </article>
-        </div>
-
-        <section class="current" aria-label="Current service">
-          <header class="current__head">
-            <h2 class="current__title">Current Service</h2>
-            <span class="current__order">Order {{ currentOrder }}</span>
-          </header>
-
-          <div class="current__scroll">
-            <ol class="stepper">
-              <li
-                v-for="step in steps"
-                :key="step.label"
-                class="step"
-                :class="`step--${step.state}`"
-              >
-                <span class="step__circle"><AppIcon :name="step.icon" :size="18" /></span>
-                <span class="step__label">{{ step.label }}</span>
-              </li>
-            </ol>
-          </div>
-        </section>
-
-        <section class="recent" aria-label="Recent services">
-          <header class="recent__head">
-            <h2 class="recent__title">Recent Services</h2>
-            <button type="button" class="recent__view-all">View All</button>
-          </header>
-
-          <div class="recent__scroll">
-            <table class="recent__table">
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Service Type</th>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="service in recentServices" :key="service.id">
-                  <td>{{ service.id }}</td>
-                  <td>{{ service.type }}</td>
-                  <td>{{ service.date }}</td>
-                  <td>{{ service.amount }}</td>
-                  <td>{{ service.status }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </section>
-
-      <aside class="updates" aria-label="Updates">
-        <header class="updates__head">
-          <AppIcon name="bell" :size="18" />
-          <h2 class="updates__title">Updates</h2>
+      <div class="dashboard__primary">
+        <header class="welcome">
+          <h1 class="welcome__title">Welcome back, {{ customerName }}!</h1>
+          <p class="welcome__text">Here is a quick overview of your laundry services.</p>
         </header>
 
-        <ul class="updates__list">
-          <li
-            v-for="update in updates"
-            :key="update.id"
-            class="update"
-            :class="{ 'update--unread': update.unread }"
-          >
-            <span class="update__dot" aria-hidden="true"></span>
-            <span class="update__body">
-              <span class="update__text">{{ update.text }}</span>
-              <span class="update__time">{{ update.time }}</span>
-            </span>
-          </li>
-        </ul>
+        <section class="overview cc-customer-card" aria-label="Service overview">
+          <div class="stats">
+            <article v-for="stat in stats" :key="stat.key" class="stat">
+              <span class="stat__icon" :class="`stat__icon--${stat.tone}`">
+                <AppIcon :name="stat.icon" :size="20" />
+              </span>
+              <span class="stat__body">
+                <span class="stat__label">{{ stat.label }}</span>
+                <span class="stat__value">{{ stat.value }}</span>
+              </span>
+            </article>
+          </div>
 
-        <button
-          type="button"
-          class="updates__mark"
-          :aria-disabled="!hasUnreadUpdates"
-          @click="markAllRead"
-        >
-          <span aria-live="polite">{{ hasUnreadUpdates ? 'Mark All As Read' : 'All read' }}</span>
-        </button>
-      </aside>
+          <section class="current" aria-label="Current service">
+            <header class="current__head">
+              <h2 class="current__title">Current Service</h2>
+              <span class="current__order">Order {{ currentOrder }}</span>
+            </header>
+
+            <div class="current__scroll">
+              <ol class="stepper">
+                <li
+                  v-for="step in steps"
+                  :key="step.label"
+                  class="step"
+                  :class="`step--${step.state}`"
+                >
+                  <span class="step__circle"><AppIcon :name="step.icon" :size="18" /></span>
+                  <span class="step__label">{{ step.label }}</span>
+                </li>
+              </ol>
+            </div>
+          </section>
+
+          <section class="recent" aria-label="Recent services">
+            <header class="recent__head">
+              <h2 class="recent__title">Recent Services</h2>
+              <button type="button" class="recent__view-all">View All</button>
+            </header>
+
+            <div class="recent__scroll">
+              <table class="recent__table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Service Type</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="service in recentServices" :key="service.id">
+                    <td>{{ service.id }}</td>
+                    <td>{{ service.type }}</td>
+                    <td>{{ service.date }}</td>
+                    <td>{{ service.amount }}</td>
+                    <td>{{ service.status }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+      </div>
+
+      <div class="dashboard__aside">
+        <RouterLink to="/book" class="pickup cc-customer-card">
+          <span class="pickup__plus"><AppIcon name="plus" :size="18" /></span>
+          <h2 class="pickup__title">Schedule a Pickup</h2>
+          <p class="pickup__text">
+            Need fresh clothes? Book your next laundry service in just a few taps.
+          </p>
+          <span class="pickup__cta">
+            Book Now
+            <AppIcon name="arrow-right" :size="18" />
+          </span>
+        </RouterLink>
+
+        <aside class="updates cc-customer-card" aria-label="Updates">
+          <header class="updates__head">
+            <AppIcon name="bell" :size="18" />
+            <h2 class="updates__title">Updates</h2>
+          </header>
+
+          <ul class="updates__list">
+            <li
+              v-for="update in updates"
+              :key="update.id"
+              class="update"
+              :class="{ 'update--unread': update.unread }"
+            >
+              <span class="update__dot" aria-hidden="true"></span>
+              <span class="update__body">
+                <span class="update__text">{{ update.text }}</span>
+                <span class="update__time">{{ update.time }}</span>
+              </span>
+            </li>
+          </ul>
+
+          <button
+            type="button"
+            class="updates__mark"
+            :aria-disabled="!hasUnreadUpdates"
+            @click="markAllRead"
+          >
+            <span aria-live="polite">{{ hasUnreadUpdates ? 'Mark All As Read' : 'All read' }}</span>
+          </button>
+        </aside>
+      </div>
     </div>
   </main>
 </template>
@@ -192,9 +213,17 @@ function markAllRead() {
   padding-bottom: 48px;
 }
 
+.dashboard__primary,
+.dashboard__aside {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
 /* Welcome ------------------------------------------------------------- */
 .welcome {
-  grid-column: 1;
+  min-width: 0;
 }
 
 .welcome__title {
@@ -211,23 +240,20 @@ function markAllRead() {
 
 /* Schedule a Pickup ------------------------------------------------- */
 .pickup {
-  grid-column: 2;
-  grid-row: 1;
-  align-self: start;
   display: flex;
   flex-direction: column;
   padding: 18px 20px;
   border-radius: var(--cc-radius-lg);
   background-image: linear-gradient(135deg, #003c90 0%, #1e5fa8 100%);
   color: var(--cc-text-on-dark);
-  box-shadow: var(--cc-shadow-card);
+  box-shadow: var(--cc-shadow-customer-card);
   cursor: pointer;
   transition: box-shadow 160ms ease;
 }
 
 .pickup:hover,
 .pickup:focus-visible {
-  box-shadow: 0 8px 24px rgba(0, 60, 144, 0.2);
+  box-shadow: 0 0 18px rgba(0, 60, 144, 0.16), 0 8px 24px rgba(0, 60, 144, 0.2);
 }
 
 .pickup:focus-visible {
@@ -279,7 +305,6 @@ function markAllRead() {
 
 /* Overview card --------------------------------------------------- */
 .overview {
-  grid-column: 1;
   display: flex;
   flex-direction: column;
   gap: 28px;
@@ -484,6 +509,11 @@ function markAllRead() {
   background-color: #e7f0fa;
 }
 
+.updates__mark:focus-visible {
+  outline: 2px solid var(--cc-tertiary);
+  outline-offset: 3px;
+}
+
 .recent__scroll {
   overflow-x: auto;
 }
@@ -499,10 +529,11 @@ function markAllRead() {
   font-weight: 600;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: var(--cc-text);
+  color: var(--cc-primary);
   text-align: left;
-  background-color: var(--cc-bg);
+  background-color: #e7f0fa;
   padding: 12px 16px;
+  border-bottom: 1px solid #c8dcef;
 }
 
 .recent__table td {
@@ -519,7 +550,6 @@ function markAllRead() {
 
 /* Updates ---------------------------------------------- */
 .updates {
-  grid-column: 2;
   display: flex;
   flex-direction: column;
   min-height: 320px;
@@ -629,17 +659,6 @@ function markAllRead() {
 @media (max-width: 960px) {
   .dashboard__grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .welcome,
-  .pickup,
-  .overview,
-  .updates {
-    grid-column: 1;
-  }
-
-  .pickup {
-    grid-row: auto;
   }
 
   .updates {

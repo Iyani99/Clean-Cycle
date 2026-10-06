@@ -12,11 +12,8 @@ import AppIcon from '../components/AppIcon.vue'
  * "Update" are intentionally inert — no approved Figma frame exists showing
  * what either should do.
  *
- * Note: the screenshot's three summary cards read Active Riders 1 / On Route
- * 1 / Available 1, while the one visible rider row is "IN TRANSIT" — a
- * pre-existing Figma/mock-data inconsistency (the same pattern already seen
- * on Payment Management's ₱0.00 vs ₱80.00 pending mismatch), reproduced as-is
- * rather than reconciled.
+ * Summary counters describe the visible sample rider: one active and on route,
+ * with none available while that rider is in transit.
  */
 const riders = [
   {
@@ -71,7 +68,7 @@ const riders = [
             <AppIcon name="check-circle" :size="16" />
           </span>
         </div>
-        <div class="summary-card__value">1</div>
+        <div class="summary-card__value">0</div>
       </article>
     </div>
 

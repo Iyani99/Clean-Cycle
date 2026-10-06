@@ -1,7 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import CustomerNavbar from '../components/CustomerNavbar.vue'
 import AppIcon from '../components/AppIcon.vue'
 
 /**
@@ -49,14 +48,12 @@ const language = ref('en-US')
 </script>
 
 <template>
-  <CustomerNavbar />
-
   <main class="settings">
     <div class="settings__inner container">
       <h1 class="settings__title">Customer Settings</h1>
 
       <div class="settings__grid">
-        <section class="card settings__profile" aria-label="Profile information">
+        <section class="card cc-customer-card settings__profile" aria-label="Profile information">
           <h2 class="card__title">Profile Information</h2>
           <hr class="card__divider" />
 
@@ -126,7 +123,7 @@ const language = ref('en-US')
           </form>
         </section>
 
-        <section class="card settings__notifications" aria-label="Notifications">
+        <section class="card cc-customer-card settings__notifications" aria-label="Notifications">
           <h2 class="card__title">Notifications</h2>
           <hr class="card__divider" />
 
@@ -157,7 +154,7 @@ const language = ref('en-US')
           </div>
         </section>
 
-        <section class="card settings__security" aria-label="Security and preferences">
+        <section class="card cc-customer-card settings__security" aria-label="Security and preferences">
           <h2 class="card__title">Security &amp; Preferences</h2>
           <hr class="card__divider" />
 
@@ -310,6 +307,7 @@ const language = ref('en-US')
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 160ms ease;
 }
 
 .btn-outline:hover {
@@ -325,6 +323,7 @@ const language = ref('en-US')
   font-size: 0.875rem;
   font-weight: 700;
   cursor: pointer;
+  transition: background-color 160ms ease;
 }
 
 .btn-primary:hover {
@@ -447,6 +446,7 @@ const language = ref('en-US')
   display: grid;
   place-content: center;
   cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
 }
 
 .check-box::after {
@@ -498,10 +498,28 @@ const language = ref('en-US')
   color: var(--cc-primary);
   font-size: 0.875rem;
   font-weight: 600;
+  transition: background-color 160ms ease;
 }
 
 .logout:hover {
   background-color: #eef4fb;
+}
+
+.btn-outline:focus-visible,
+.btn-primary:focus-visible,
+.logout:focus-visible {
+  outline: 2px solid var(--cc-tertiary);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-outline,
+  .btn-primary,
+  .logout,
+  .check-box,
+  .check-box::after {
+    transition: none;
+  }
 }
 
 /* Footer ------------------------------------------------------------- */

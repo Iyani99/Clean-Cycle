@@ -1,7 +1,6 @@
 <script setup>
 import { computed, nextTick, reactive, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import CustomerNavbar from '../components/CustomerNavbar.vue'
 import AppIcon from '../components/AppIcon.vue'
 import BookingSection from '../components/BookingSection.vue'
 
@@ -108,17 +107,15 @@ function confirmBooking() {
 </script>
 
 <template>
-  <CustomerNavbar />
-
   <main class="book">
     <div class="book__inner">
-      <header class="book__intro">
+      <header class="book__intro cc-customer-card">
         <h1 class="book__title">Book a Service</h1>
         <p class="book__lead">Follow the steps below to schedule your booking.</p>
       </header>
 
       <form class="book__form" @submit.prevent="confirmBooking">
-        <BookingSection :step="1" title="Select Services" :complete="!missing.services">
+        <BookingSection class="cc-customer-card" :step="1" title="Select Services" :complete="!missing.services">
           <div class="grid-2">
             <label
               v-for="service in services"
@@ -143,7 +140,7 @@ function confirmBooking() {
           </p>
         </BookingSection>
 
-        <BookingSection :step="2" title="Logistics" :complete="!missing.logistics">
+        <BookingSection class="cc-customer-card" :step="2" title="Logistics" :complete="!missing.logistics">
           <div class="grid-3">
             <label
               v-for="option in logisticsOptions"
@@ -168,7 +165,7 @@ function confirmBooking() {
           </p>
         </BookingSection>
 
-        <BookingSection :step="3" title="Scheduling" :complete="!missing.date && !missing.time">
+        <BookingSection class="cc-customer-card" :step="3" title="Scheduling" :complete="!missing.date && !missing.time">
           <div class="grid-2">
             <label class="field">
               <span class="field__label">Preferred Date</span>
@@ -195,6 +192,7 @@ function confirmBooking() {
         </BookingSection>
 
         <BookingSection
+          class="cc-customer-card"
           :step="4"
           title="Contact Information"
           :complete="!missing.fullName && !missing.phone && !missing.address"
@@ -244,7 +242,7 @@ function confirmBooking() {
           </p>
         </BookingSection>
 
-        <BookingSection :step="5" title="Payment Method" :complete="!missing.payment">
+        <BookingSection class="cc-customer-card" :step="5" title="Payment Method" :complete="!missing.payment">
           <div class="grid-2">
             <label
               v-for="option in paymentOptions"
@@ -394,6 +392,7 @@ function confirmBooking() {
   display: grid;
   place-content: center;
   cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
 }
 
 .pick__box::after {
@@ -450,6 +449,7 @@ function confirmBooking() {
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--cc-heading);
+  transition: color 160ms ease;
 }
 
 .opt--on {
@@ -469,7 +469,8 @@ function confirmBooking() {
 
 .pick,
 .opt {
-  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+  transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease,
+    color 160ms ease, box-shadow 160ms ease;
 }
 
 .pick:hover,
@@ -566,6 +567,7 @@ function confirmBooking() {
   letter-spacing: 0.8px;
   text-transform: uppercase;
   cursor: pointer;
+  transition: background-color 160ms ease;
 }
 
 .book__confirm:hover {
@@ -577,6 +579,11 @@ function confirmBooking() {
   margin-top: 16px;
   text-align: center;
   text-decoration: none;
+}
+
+.book__confirm:focus-visible {
+  outline: 2px solid var(--cc-tertiary);
+  outline-offset: 3px;
 }
 
 /* Responsive ------------------------------------------------ */
@@ -601,7 +608,11 @@ function confirmBooking() {
 
 @media (prefers-reduced-motion: reduce) {
   .pick,
-  .opt {
+  .opt,
+  .pick__box,
+  .pick__box::after,
+  .opt__label,
+  .book__confirm {
     transition: none;
   }
 

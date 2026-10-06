@@ -11,13 +11,12 @@ import AppIcon from '../components/AppIcon.vue'
  * is no backend, no real persistence, no search API, and no assignment logic.
  * "Confirm" only flips a local `status` field; nothing survives a refresh.
  *
- * Note: this screen's screenshot uses booking ID "#CC-001", while the Admin
- * Dashboard's Recent Bookings mock row uses "#BK-0921" — a pre-existing
- * Figma/mock-data inconsistency between the two approved frames, reproduced
- * as-is rather than silently normalized.
+ * Sample IDs, customers, services, and statuses align with the Admin
+ * Dashboard's smaller Recent Bookings snapshot.
  */
 const statusFilters = ['All', 'Pending', 'Confirmed', 'Picked Up', 'Washing', 'Out for Delivery', 'Completed']
 const activeFilter = ref('All')
+const hasSwitchedStatus = ref(false)
 const searchQuery = ref('')
 
 const bookings = reactive([
@@ -27,6 +26,41 @@ const bookings = reactive([
     service: 'Wash & Fold (1 kg)',
     status: 'Pending',
     rider: 'Unassigned',
+  },
+  {
+    id: '#CC-002',
+    name: 'Maria Santos',
+    service: 'Wash & Fold (3 kg)',
+    status: 'Confirmed',
+    rider: 'Unassigned',
+  },
+  {
+    id: '#CC-003',
+    name: 'Ana Dela Cruz',
+    service: 'Dry Cleaning (2 items)',
+    status: 'Picked Up',
+    rider: 'Marco Reyes',
+  },
+  {
+    id: '#CC-004',
+    name: 'Paolo Reyes',
+    service: 'Wash & Fold (2 kg)',
+    status: 'Washing',
+    rider: 'Marco Reyes',
+  },
+  {
+    id: '#CC-005',
+    name: 'Liza Garcia',
+    service: 'Dry Cleaning (4 items)',
+    status: 'Out for Delivery',
+    rider: 'Jayrence Salado',
+  },
+  {
+    id: '#CC-006',
+    name: 'Carlo Mendoza',
+    service: 'Wash & Fold (4 kg)',
+    status: 'Completed',
+    rider: 'Marco Reyes',
   },
 ])
 
@@ -45,6 +79,12 @@ const filteredBookings = computed(() => {
 function confirmBooking(booking) {
   // Frontend prototype: local status flip only, nothing sent or stored.
   booking.status = 'Confirmed'
+}
+
+function selectStatusFilter(filter) {
+  if (activeFilter.value === filter) return
+  activeFilter.value = filter
+  hasSwitchedStatus.value = true
 }
 </script>
 
@@ -69,7 +109,7 @@ function confirmBooking(booking) {
           type="button"
           class="filter-pill"
           :class="{ 'filter-pill--active': activeFilter === filter }"
-          @click="activeFilter = filter"
+          @click="selectStatusFilter(filter)"
         >
           {{ filter }}
         </button>
@@ -94,7 +134,7 @@ function confirmBooking(booking) {
               <th>ACTIONS</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody :key="activeFilter" :class="{ 'cc-filter-results-enter': hasSwitchedStatus }">
             <tr v-for="booking in filteredBookings" :key="booking.id">
               <td><span class="booking-id">{{ booking.id }}</span></td>
               <td>{{ booking.name }}</td>
@@ -297,7 +337,7 @@ function confirmBooking(booking) {
 
 .table-card__scroll {
   overflow-x: auto;
-  min-height: 300px;
+  min-height: 390px;
 }
 
 .bookings-table {
@@ -311,11 +351,11 @@ function confirmBooking(booking) {
   font-weight: 600;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: var(--cc-text);
+  color: var(--cc-primary);
   text-align: left;
-  background-color: var(--cc-bg);
+  background-color: #e7f0fa;
   padding: 14px 24px;
-  border-bottom: 1px solid var(--cc-border);
+  border-bottom: 1px solid #c8dcef;
 }
 
 .bookings-table td {

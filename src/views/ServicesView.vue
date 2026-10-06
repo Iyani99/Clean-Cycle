@@ -1,6 +1,5 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-import CustomerNavbar from '../components/CustomerNavbar.vue'
 import AppIcon from '../components/AppIcon.vue'
 
 import washAndFoldImage from '../assets/images/wash-and-fold.jpg'
@@ -11,7 +10,7 @@ import dryCleaningImage from '../assets/images/dry-cleaning.jpg'
  *
  * Frontend-only prototype. The service list, prices, and features below are
  * static mock data — there is no pricing API, no cart, and no booking logic.
- * Every "Book Now" button just routes to the (placeholder) /book screen.
+ * Every "Book Now" button routes to the frontend-only /book screen.
  *
  * The two cards share the same structure and differ only in this data, so the
  * markup is a single `v-for` rather than a separate component. The homepage
@@ -26,6 +25,10 @@ const services = [
     unit: 'per Kg',
     description:
       'Keep your clothes fresh and ready to wear with our reliable laundry service.',
+    details: [
+      'Best for everyday clothes and household linens such as shirts, trousers, towels, and bedsheets. Items are washed, dried, and folded so they are ready to put away.',
+      'Color separation helps keep light and dark pieces organized. Share any garment care instructions when you book.',
+    ],
     features: ['Color separation included'],
   },
   {
@@ -35,14 +38,16 @@ const services = [
     unit: 'starting per item',
     description:
       'Special care for your delicate clothes and formal wear. We gently clean your garments to help maintain their quality and appearance.',
+    details: [
+      'Designed for garments that need more careful handling, including suits, dresses, and other formal or delicate pieces. Visible spots can receive attention before cleaning.',
+      'Stain pre-treatment and hand-finished pressing are part of the listed care. Share any garment-specific instructions when you book.',
+    ],
     features: ['Stain pre-treatment', 'Hand-finished pressing'],
   },
 ]
 </script>
 
 <template>
-  <CustomerNavbar />
-
   <main class="services-page">
     <div class="services-page__inner container">
       <header class="services-intro">
@@ -54,7 +59,7 @@ const services = [
       </header>
 
       <div class="offer-grid">
-        <article v-for="service in services" :key="service.title" class="offer">
+        <article v-for="service in services" :key="service.title" class="offer cc-customer-card">
           <div class="offer__media">
             <img :src="service.image" :alt="service.title" loading="lazy" />
           </div>
@@ -68,18 +73,21 @@ const services = [
               </p>
             </div>
 
-            <p class="offer__text">{{ service.description }}</p>
+            <div class="offer__details" tabindex="0" :aria-label="`${service.title} details`">
+              <p class="offer__text">{{ service.description }}</p>
+              <p v-for="detail in service.details" :key="detail" class="offer__text">{{ detail }}</p>
 
-            <ul class="offer__features">
-              <li
-                v-for="feature in service.features"
-                :key="feature"
-                class="offer__feature"
-              >
-                <span class="offer__check"><AppIcon name="check-circle" :size="18" /></span>
-                <span>{{ feature }}</span>
-              </li>
-            </ul>
+              <ul class="offer__features">
+                <li
+                  v-for="feature in service.features"
+                  :key="feature"
+                  class="offer__feature"
+                >
+                  <span class="offer__check"><AppIcon name="check-circle" :size="18" /></span>
+                  <span>{{ feature }}</span>
+                </li>
+              </ul>
+            </div>
 
             <RouterLink to="/book" class="offer__cta">
               Book Now
@@ -128,7 +136,7 @@ const services = [
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .offer {
@@ -149,6 +157,8 @@ const services = [
 .offer__body {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
   padding: 24px;
 }
 
@@ -183,6 +193,20 @@ const services = [
   margin-top: 2px;
 }
 
+.offer__details {
+  height: 192px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cc-border-strong) transparent;
+}
+
+.offer__details:focus-visible {
+  outline: 2px solid var(--cc-tertiary);
+  outline-offset: -2px;
+}
+
 .offer__text {
   font-size: 0.9375rem;
   line-height: 1.55;
@@ -195,7 +219,7 @@ const services = [
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 24px;
+  margin-bottom: 0;
 }
 
 .offer__feature {
@@ -217,7 +241,7 @@ const services = [
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: auto;
+  margin-top: 20px;
   padding: 13px 20px;
   border-radius: var(--cc-radius-sm);
   background-color: var(--cc-primary);
@@ -225,10 +249,22 @@ const services = [
   font-size: 0.875rem;
   font-weight: 700;
   letter-spacing: 0.4px;
+  transition: background-color 160ms ease;
 }
 
 .offer__cta:hover {
   background-color: #002d6d;
+}
+
+.offer__cta:focus-visible {
+  outline: 2px solid var(--cc-tertiary);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .offer__cta {
+    transition: none;
+  }
 }
 
 /* Responsive ----------------------------------------------------- */

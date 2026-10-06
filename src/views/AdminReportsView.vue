@@ -221,7 +221,7 @@ const mostRequestedService = serviceMix.reduce((top, item) => (item.count > top.
   background-color: var(--cc-surface);
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius-lg);
-  box-shadow: var(--cc-shadow-card);
+  box-shadow: var(--cc-shadow-admin-card);
 }
 
 .metric-card--featured {
@@ -311,7 +311,7 @@ const mostRequestedService = serviceMix.reduce((top, item) => (item.count > top.
   background-color: var(--cc-surface);
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius-lg);
-  box-shadow: var(--cc-shadow-card);
+  box-shadow: var(--cc-shadow-admin-card);
 }
 
 .report-panel--chart {

@@ -1,6 +1,5 @@
 <script setup>
 import { computed, ref } from 'vue'
-import CustomerNavbar from '../components/CustomerNavbar.vue'
 import AppIcon from '../components/AppIcon.vue'
 
 /**
@@ -13,8 +12,8 @@ import AppIcon from '../components/AppIcon.vue'
 const orderNo = 'CC-8942-LN'
 
 const trackingSteps = [
-  { key: 'received', label: 'RECEIVED', state: 'done', meta: 'Oct 24, 08:30 AM' },
-  { key: 'picking-up', label: 'PICKING UP', state: 'done', meta: 'Oct 24, 10:15 AM' },
+  { key: 'received', label: 'RECEIVED', state: 'done', meta: 'Aug 21, 08:30 AM' },
+  { key: 'picking-up', label: 'PICKING UP', state: 'done', meta: 'Aug 21, 10:15 AM' },
   { key: 'in-progress', label: 'IN PROGRESS', state: 'current', meta: 'Processing' },
   {
     key: 'ready',
@@ -121,8 +120,6 @@ function contactSupport() {
 </script>
 
 <template>
-  <CustomerNavbar />
-
   <main class="tracking">
     <div class="tracking__inner container">
       <header class="tracking__header">
@@ -136,7 +133,7 @@ function contactSupport() {
       </header>
 
       <div class="tracking__grid">
-        <section class="card" aria-label="Status journey">
+        <section class="card cc-customer-card" aria-label="Status journey">
           <h2 class="card__title">Status Journey</h2>
 
           <p class="journey-status" role="status">
@@ -162,7 +159,7 @@ function contactSupport() {
             </li>
           </ol>
 
-          <div class="journey-info">
+          <div class="journey-info" :class="{ 'journey-info--changed': cancelled }">
             <div
               class="journey-info__item journey-info__item--current"
               :class="{ 'journey-info__item--cancelled': cancelled }"
@@ -179,7 +176,7 @@ function contactSupport() {
           </div>
         </section>
 
-        <section class="card" aria-label="Service details">
+        <section class="card cc-customer-card" aria-label="Service details">
           <h2 class="card__title">Service Details</h2>
 
           <dl class="sd">
@@ -345,6 +342,7 @@ function contactSupport() {
   height: 28px;
   border-radius: 999px;
   background-color: var(--cc-surface);
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
 }
 
 .stage--done .stage__marker {
@@ -387,6 +385,7 @@ function contactSupport() {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.5px;
+  transition: color 180ms ease;
 }
 
 .stage--done .stage__label {
@@ -423,6 +422,22 @@ function contactSupport() {
   margin-top: 36px;
   padding-top: 24px;
   border-top: 1px solid var(--cc-border);
+}
+
+.journey-info--changed {
+  animation: journey-info-change 180ms ease both;
+}
+
+@keyframes journey-info-change {
+  from {
+    opacity: 0.35;
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .journey-info__item {
@@ -505,10 +520,16 @@ function contactSupport() {
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 .sd-support:hover {
   background-color: var(--cc-bg);
+}
+
+.sd-support:focus-visible {
+  outline: 2px solid var(--cc-tertiary);
+  outline-offset: 2px;
 }
 
 .sd-cancel {
@@ -596,8 +617,16 @@ function contactSupport() {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .journey-info__item {
+  .journey-info__item,
+  .stage__marker,
+  .stage__label,
+  .sd-support,
+  .sd-cancel {
     transition: none;
+  }
+
+  .journey-info--changed {
+    animation: none;
   }
 }
 </style>

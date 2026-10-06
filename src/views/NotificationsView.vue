@@ -1,6 +1,5 @@
 <script setup>
 import { computed, ref } from 'vue'
-import CustomerNavbar from '../components/CustomerNavbar.vue'
 import AppIcon from '../components/AppIcon.vue'
 
 /**
@@ -72,8 +71,6 @@ function toggleDetail(notification) {
 </script>
 
 <template>
-  <CustomerNavbar />
-
   <main class="notifications">
     <div class="notifications__content container">
       <header class="notifications__header">
@@ -92,7 +89,7 @@ function toggleDetail(notification) {
         <article
           v-for="notification in visibleNotifications"
           :key="notification.id"
-          class="notif-card"
+          class="notif-card cc-customer-card"
           :class="{ 'notif-card--read': notification.read }"
         >
           <span class="notif-card__icon">
@@ -174,6 +171,7 @@ function toggleDetail(notification) {
 }
 
 .notifications__mark-all:hover:not([aria-disabled='true']) {
+  color: #002d6d;
   text-decoration: underline;
 }
 
@@ -247,9 +245,11 @@ function toggleDetail(notification) {
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
+  transition: color 160ms ease;
 }
 
 .notif-card__details:hover {
+  color: #002d6d;
   text-decoration: underline;
 }
 
@@ -282,16 +282,26 @@ function toggleDetail(notification) {
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 160ms ease;
 }
 
 .load-more-btn:hover {
   background-color: var(--cc-bg);
 }
 
+.notifications__mark-all:focus-visible,
+.notif-card__details:focus-visible,
+.load-more-btn:focus-visible {
+  outline: 2px solid var(--cc-tertiary);
+  outline-offset: 3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .notifications__mark-all,
   .notif-card__icon,
-  .notif-card__title {
+  .notif-card__title,
+  .notif-card__details,
+  .load-more-btn {
     transition: none;
   }
 }

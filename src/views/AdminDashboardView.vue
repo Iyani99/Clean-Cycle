@@ -7,27 +7,52 @@ import AppIcon from '../components/AppIcon.vue'
 /**
  * Dashboard - Admin (Figma frame "Dashboard Admin/Customer" — Admin side).
  *
- * Frontend-only prototype. Every number and row below is static mock data —
- * there is no backend, no live booking data, no real revenue calculation, and
- * no notification service. "Last Updated" is fixed text, not a live clock.
+ * Frontend-only prototype. This fixed Aug 21 sample snapshot mirrors the six
+ * Booking Management examples and the initial paid total in Payment Management.
+ * There is no backend, live booking data, real revenue calculation, or
+ * notification service. "Last Updated" is fixed text, not a live clock.
  */
 const stats = [
-  { key: 'total', label: 'TOTAL BOOKINGS', value: '0', icon: 'inbox', tone: 'blue' },
-  { key: 'pending', label: 'PENDING', value: '0', icon: 'history', tone: 'pink' },
-  { key: 'ongoing', label: 'ONGOING', value: '0', icon: 'spin', tone: 'teal' },
-  { key: 'delivery', label: 'FOR DELIVERY', value: '0', icon: 'truck', tone: 'blue' },
-  { key: 'completed', label: 'COMPLETED (TODAY)', value: '0', icon: 'check-circle', tone: 'blue' },
-  { key: 'revenue', label: 'TOTAL REVENUE', value: '₱0', icon: 'cash', tone: 'green' },
+  { key: 'total', label: 'TOTAL BOOKINGS', value: '6', icon: 'inbox', tone: 'blue' },
+  { key: 'pending', label: 'PENDING', value: '1', icon: 'history', tone: 'pink' },
+  { key: 'ongoing', label: 'ONGOING', value: '3', icon: 'spin', tone: 'teal' },
+  { key: 'delivery', label: 'FOR DELIVERY', value: '1', icon: 'truck', tone: 'blue' },
+  { key: 'completed', label: 'COMPLETED (TODAY)', value: '1', icon: 'check-circle', tone: 'blue' },
+  { key: 'revenue', label: 'TOTAL REVENUE', value: '₱975.00', icon: 'cash', tone: 'green' },
 ]
 
 const recentBookings = [
   {
-    id: '#BK-0921',
+    id: '#CC-001',
     name: 'Jerson Tomas',
     datetime: 'Aug 21, 2026, 10:00 AM',
-    service: 'Wash & Fold',
+    service: 'Wash & Fold (1 kg)',
     status: 'Pending',
     rider: 'Unassigned',
+  },
+  {
+    id: '#CC-004',
+    name: 'Paolo Reyes',
+    datetime: 'Aug 21, 2026, 9:20 AM',
+    service: 'Wash & Fold (2 kg)',
+    status: 'Washing',
+    rider: 'Marco Reyes',
+  },
+  {
+    id: '#CC-005',
+    name: 'Liza Garcia',
+    datetime: 'Aug 21, 2026, 8:45 AM',
+    service: 'Dry Cleaning (4 items)',
+    status: 'Out for Delivery',
+    rider: 'Jayrence Salado',
+  },
+  {
+    id: '#CC-006',
+    name: 'Carlo Mendoza',
+    datetime: 'Aug 21, 2026, 8:15 AM',
+    service: 'Wash & Fold (4 kg)',
+    status: 'Completed',
+    rider: 'Marco Reyes',
   },
 ]
 
@@ -41,7 +66,10 @@ function dismissBanner() {
 <template>
   <AdminLayout>
     <header class="admin-dashboard__header">
-      <h1 class="admin-dashboard__title">Dashboard Overview</h1>
+      <div>
+        <h1 class="admin-dashboard__title">Dashboard Overview</h1>
+        <p class="admin-dashboard__subtitle">Sample operational snapshot · Aug 21, 2026</p>
+      </div>
       <div class="admin-dashboard__updated">
         <span class="admin-dashboard__updated-label">Last Updated</span>
         <span class="admin-dashboard__updated-value">10:30 AM</span>
@@ -52,7 +80,7 @@ function dismissBanner() {
     <div v-if="bannerVisible" class="banner">
       <div class="banner__text">
         <AppIcon name="megaphone" :size="20" />
-        <span>New Booking Notification: 5 new bookings requiring assignment</span>
+        <span>New Booking Notification: 2 bookings requiring assignment</span>
       </div>
       <div class="banner__actions">
         <RouterLink to="/admin/bookings" class="banner__review">Review Now</RouterLink>
@@ -97,10 +125,20 @@ function dismissBanner() {
               <td>{{ booking.name }}</td>
               <td>{{ booking.datetime }}</td>
               <td>{{ booking.service }}</td>
-              <td><span class="status-pill">{{ booking.status }}</span></td>
+              <td>
+                <span
+                  class="status-pill"
+                  :class="{
+                    'status-pill--progress': booking.status === 'Washing' || booking.status === 'Out for Delivery',
+                    'status-pill--completed': booking.status === 'Completed',
+                  }"
+                >
+                  {{ booking.status }}
+                </span>
+              </td>
               <td>{{ booking.rider }}</td>
               <td>
-                <button type="button" class="row-action" aria-label="Row actions">
+                <button type="button" class="row-action" :aria-label="`Actions for ${booking.id}`">
                   <AppIcon name="more-vertical" :size="18" />
                 </button>
               </td>
@@ -126,6 +164,12 @@ function dismissBanner() {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--cc-heading);
+}
+
+.admin-dashboard__subtitle {
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  color: var(--cc-text);
 }
 
 .admin-dashboard__updated {
@@ -332,10 +376,11 @@ function dismissBanner() {
   font-weight: 600;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: var(--cc-text);
+  color: var(--cc-primary);
   text-align: left;
+  background-color: #e7f0fa;
   padding: 14px 24px;
-  border-bottom: 1px solid var(--cc-border);
+  border-bottom: 1px solid #c8dcef;
 }
 
 .recent-table td {
@@ -358,6 +403,16 @@ function dismissBanner() {
   color: #c94a5a;
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+.status-pill--progress {
+  background-color: #e7f0fa;
+  color: var(--cc-secondary);
+}
+
+.status-pill--completed {
+  background-color: #e0f4ef;
+  color: #157347;
 }
 
 .row-action {

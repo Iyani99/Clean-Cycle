@@ -27,6 +27,9 @@ defineProps({
 
 <style scoped>
 .admin-layout {
+  --cc-shadow-admin-card:
+    0 0 18px rgba(15, 23, 42, 0.11),
+    0 8px 24px rgba(15, 23, 42, 0.10);
   display: flex;
   min-height: 100vh;
   background-color: var(--cc-bg);
@@ -46,5 +49,25 @@ defineProps({
   .admin-layout__main {
     padding: 24px 20px 40px;
   }
+}
+</style>
+
+<style>
+/* Shared depth for large Admin surfaces. Reports uses the same Admin-only
+   shadow in its card styles; keep controls, rows, and placeholders flat. */
+.admin-layout__main :is(
+  .stat-card,
+  .recent-card,
+  .filter-card,
+  .controls-card,
+  .table-card,
+  .summary-card,
+  .reminder-card,
+  .settings-main > .card,
+  .settings-aside > .aside-card,
+  .new-booking > .card,
+  .notif-card:not(.notif-card--empty)
+) {
+  box-shadow: var(--cc-shadow-admin-card);
 }
 </style>
