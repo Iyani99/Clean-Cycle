@@ -48,6 +48,73 @@ const displayedSteps = computed(() => {
   })
 })
 
+const stageCopy = {
+  received: {
+    title: 'Booking received',
+    current: 'Your booking has been recorded and is awaiting pickup.',
+    next: 'Your booking will be recorded before pickup begins.',
+  },
+  'picking-up': {
+    title: 'Pickup in progress',
+    current: 'Your laundry is being collected for processing.',
+    next: 'Your laundry will be collected for processing.',
+  },
+  'in-progress': {
+    title: 'Laundry in progress',
+    current: 'Your laundry is currently being processed and prepared for the next stage.',
+    next: 'Your laundry will be processed after pickup.',
+  },
+  ready: {
+    title: 'Ready for Delivery',
+    current: 'Your laundry has reached the final stage shown in this journey.',
+    next: 'Your laundry will be ready for delivery after processing.',
+  },
+}
+
+const currentStep = computed(() =>
+  trackingSteps.find((step) => step.state === 'current') ??
+  [...trackingSteps].reverse().find((step) => step.state === 'done'),
+)
+
+const nextStep = computed(() => {
+  if (cancelled.value) return null
+  const currentIndex = trackingSteps.indexOf(currentStep.value)
+  return trackingSteps.slice(currentIndex + 1).find((step) => step.state === 'pending') ?? null
+})
+
+const currentUpdate = computed(() =>
+  cancelled.value
+    ? {
+        title: 'Booking cancelled',
+        description: 'The journey has ended. Service details remain available for reference.',
+      }
+    : {
+        title: stageCopy[currentStep.value.key].title,
+        description: stageCopy[currentStep.value.key].current,
+      },
+)
+
+const nextUpdate = computed(() => {
+  if (cancelled.value) {
+    return {
+      title: 'No next stage',
+      description: 'This cancelled booking will not progress further.',
+    }
+  }
+
+  if (!nextStep.value) {
+    return {
+      title: 'Final stage reached',
+      description: 'No further stage is shown in this tracking journey.',
+    }
+  }
+
+  return {
+    title: stageCopy[nextStep.value.key].title,
+    description: stageCopy[nextStep.value.key].next,
+  }
+})
+
 function contactSupport() {
   supportRequested.value = true
 }
@@ -94,6 +161,22 @@ function contactSupport() {
               </span>
             </li>
           </ol>
+
+          <div class="journey-info">
+            <div
+              class="journey-info__item journey-info__item--current"
+              :class="{ 'journey-info__item--cancelled': cancelled }"
+            >
+              <p class="journey-info__label">Current Update</p>
+              <h3 class="journey-info__title">{{ currentUpdate.title }}</h3>
+              <p class="journey-info__description">{{ currentUpdate.description }}</p>
+            </div>
+            <div class="journey-info__item">
+              <p class="journey-info__label">What's Next</p>
+              <h3 class="journey-info__title">{{ nextUpdate.title }}</h3>
+              <p class="journey-info__description">{{ nextUpdate.description }}</p>
+            </div>
+          </div>
         </section>
 
         <section class="card" aria-label="Service details">
@@ -332,6 +415,52 @@ function contactSupport() {
   color: #9aa0a8;
 }
 
+.journey-info {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  max-width: 640px;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--cc-border);
+}
+
+.journey-info__item {
+  min-width: 0;
+  padding-left: 14px;
+  border-left: 2px solid var(--cc-border-strong);
+  transition: border-color 160ms ease;
+}
+
+.journey-info__item--current {
+  border-left-color: var(--cc-primary);
+}
+
+.journey-info__item--cancelled {
+  border-left-color: var(--cc-border-strong);
+}
+
+.journey-info__label {
+  margin-bottom: 6px;
+  color: var(--cc-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.journey-info__title {
+  color: var(--cc-heading);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.journey-info__description {
+  margin-top: 6px;
+  color: var(--cc-text);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
 /* Service details -------------------------------------------- */
 .sd {
   margin-top: 10px;
@@ -428,6 +557,13 @@ function contactSupport() {
 /* Below ~560px the horizontal 4-step journey gets too cramped for the
    labels + timestamps, so it becomes a vertical stepper. */
 @media (max-width: 560px) {
+  .journey-info {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    margin-top: 28px;
+    padding-top: 20px;
+  }
+
   .journey {
     flex-direction: column;
     max-width: none;
@@ -456,6 +592,12 @@ function contactSupport() {
 
   .stage__body {
     padding-top: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-info__item {
+    transition: none;
   }
 }
 </style>
